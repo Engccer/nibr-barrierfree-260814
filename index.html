@@ -1226,6 +1226,11 @@ body.doc .shots img{width:100%;height:auto;}
     playTurnTone();
   }
 
+  /* 내레이션을 두는 슬라이드. 발표자가 진행 상태를 귀로 확인하는 큐라서 구조가
+     바뀌는 자리에만 둔다. 빈 배열로 두면 전 슬라이드에서 재생을 시도한다.
+     _generate_narration.py, .deck-check.json과 같은 값을 유지한다. */
+  var NARRATED = [1, 6, 18, 30, 38, 39, 40, 41, 42, 43, 45, 47];
+
   var narrTimer = null, narrAudio = null;
   try{
     narrAudio = new Audio('narration/slide-01.mp3');
@@ -1241,6 +1246,7 @@ body.doc .shots img{width:100%;height:auto;}
   function playNarration(index){
     stopNarration();
     if (!narrOn || docMode || !narrAudio) return;
+    if (NARRATED.length && NARRATED.indexOf(index + 1) < 0) return;
     narrTimer = setTimeout(function(){
       narrTimer = null;
       if (cur !== index) return;

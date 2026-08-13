@@ -92,6 +92,14 @@ python "C:\Users\pc\.claude\skills\lecture-deck\scripts\check_all.py" "C:\Users\
 
 **미디어는 vh로 못 박지 않는다.** 사진과 영상 높이를 `50vh`·`56vh`로 두었더니 창 높이 674px에서 다시 넘쳤다. `.slide.active`를 세로 flex로 두고 미디어 블록이 남은 높이를 차지하게 한 뒤 그 안에서 이미지가 줄어들게 했다(`min-height:0`이 없으면 flex 항목은 콘텐츠 크기 아래로 줄지 않는다). 줄어들 곳이 없는 칩·차트는 `@media (max-height:760px)`에서 여백만 조인다. 글자 크기와 수치는 건드리지 않는다.
 
+## 내레이션은 열두 장에만 둔다
+
+청중에 시각장애인이 없어 내레이션은 청중용 해설이 아니라 **발표자가 진행 상태를 귀로 확인하는 큐**다. 그래서 전 슬라이드가 아니라 구조가 바뀌는 자리에만 둔다. 표지(1), 장 표지 넷(6·18·30·38), 제언 다섯(39~43), 나가며(45), 마지막 문장(47)이다. 문안은 제목까지만 담는다.
+
+**대상 번호가 세 곳에 같이 적혀 있다.** `_generate_narration.py`의 `NARRATIONS` 키, `index.html`의 `NARRATED` 배열, `.deck-check.json`의 `narration`이다. 하나를 고치면 셋을 함께 고친다. `NARRATED`에 없는 장에서는 재생을 시도하지 않으므로 없는 mp3를 부르는 요청이 생기지 않는다.
+
+검사기는 `.deck-check.json`의 `narration`을 읽어 그 열두 장만 본다. 이 키가 없으면 전 슬라이드에 내레이션이 있어야 하는 것으로 판정한다.
+
 ## 손대지 말아야 할 것
 
 엔진은 `lecture-deck` 스킬 템플릿에서 왔다. 아래 셋은 실패를 겪고 되돌린 자리다.
@@ -109,6 +117,5 @@ python "C:\Users\pc\.claude\skills\lecture-deck\scripts\check_all.py" "C:\Users\
 
 ## 미결 사항
 
-- **내레이션 미생성.** `_generate_narration.py`에 48장 문안이 들어 있고 mp3만 없다. 청중에 시각장애인 구성이 확인되지 않아 옵션으로 남겼다. 생성하면 ElevenLabs 유료 호출이 48건 발생한다
 - **경기장 사진 교체.** 2026년 초 스페인 여행 사진에서 실물을 찾으면 `img/stadium-boot.jpg`를 대체한다
 - **현장 확인.** 프로젝터 음향 출력과 인터넷 회선. 영상은 폴더 안에 있어 회선과 무관하지만 음향 출력은 필요하다
