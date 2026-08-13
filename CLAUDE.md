@@ -13,6 +13,8 @@
 | 계보 | **visual** (사진·영상 중심. 할 말은 원고에 있고 현장에서 구두로 푼다) |
 | 슬라이드 | 48장 |
 
+저장소는 https://github.com/Engccer/nibr-barrierfree-260814 이고 배포본은 https://engccer.github.io/nibr-barrierfree-260814/ 다(2026-08-14 공개). 위원장 사진과 뉴시스 보도 사진이 공개 URL로 나가는 것을 확인받고 올렸다.
+
 원고는 `G:\내 드라이브\KHY\Lectures\260814 국립생물자원관 교육강사 워크숍\김헌용_강의원고.md`가 정본이다. 콘텐츠 자산(원고·공문·설문·참고자료)은 그 행사 폴더에 두고, 덱만 여기에 둔다.
 
 ## 구성
@@ -108,6 +110,5 @@ python "C:\Users\pc\.claude\skills\lecture-deck\scripts\check_all.py" "C:\Users\
 ## 미결 사항
 
 - **내레이션 미생성.** `_generate_narration.py`에 48장 문안이 들어 있고 mp3만 없다. 청중에 시각장애인 구성이 확인되지 않아 옵션으로 남겼다. 생성하면 ElevenLabs 유료 호출이 48건 발생한다
-- **GitHub 저장소·Pages 배포 안 함.** 본인 사진과 언론사 사진이 들어 있어 공개 배포 여부를 확정하지 않았다
 - **경기장 사진 교체.** 2026년 초 스페인 여행 사진에서 실물을 찾으면 `img/stadium-boot.jpg`를 대체한다
 - **현장 확인.** 프로젝터 음향 출력과 인터넷 회선. 영상은 폴더 안에 있어 회선과 무관하지만 음향 출력은 필요하다
