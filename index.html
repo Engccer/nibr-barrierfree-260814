@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>내가 만난 배리어프리 교육과 전시 · 국립생물자원관 교육강사 워크숍</title>
+<!--
+  2026-08-14 국립생물자원관 교육강사 워크숍 강연 덱
+
+  엔진은 lecture-deck 스킬의 templates/deck.html에서 왔다. 손대지 말아야 할 것:
+    - turn.volume / narrAudio.volume을 낮추지 않는다. 스크린 리더 음성에 묻힌다
+    - NARR_DELAY 1100을 0으로 만들지 않는다. 제목 낭독과 정면으로 겹친다
+    - .fragment의 visibility:hidden을 opacity:0으로 바꾸지 않는다
+
+  덱 고유 추가분: 사진·영상 슬라이드(.shot/.shots/.filmstrip), 설문 차트(.chart-card,
+  .dual-chart). 차트 마크업과 수치 구조는 260523 기조강연 덱에서 가져왔고 표본을
+  155명 기준으로 갱신했다. 스타일은 이 템플릿 팔레트에 맞춰 새로 썼다.
+-->
+<style>
+:root{
+  /* Bright Inclusive Studio · 라이트 페이퍼 */
+  --paper:     #F7F4ED;
+  --paper-2:   #FFFEFA;
+  --paper-3:   #EFEADC;
+  --ink:       #172033;
+  --ink-soft:  #495369;
+  --ink-mute:  #7E879A;
+  --blue:      #5E8CFF;
+  --blue-soft: #E5EBFF;
+  --green:     #36B37E;
+  --green-soft:#E2F4EB;
+  --coral:     #FF7A6B;
+  --coral-soft:#FFE6E2;
+  --sand:      #C7AE7E;
+  --sand-soft: #F0E6D0;
+  --rule:        rgba(23,32,51,0.10);
+  --rule-strong: rgba(23,32,51,0.22);
+  --focus:     #FF7A6B;
+
+  /* 행사장 네트워크가 막혀도 글꼴이 바뀌지 않도록 시스템 폰트만 쓴다 */
+  --sans: "Pretendard", "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", sans-serif;
+  --serif: "Noto Serif KR", "Batang", serif;
+
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-card: 0 24px 50px rgba(23,32,51,0.08), 0 4px 14px rgba(23,32,51,0.04);
+  --shadow-soft: 0 12px 30px rgba(23,32,51,0.06);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  line-height:1.65;
+  word-break:keep-all;
+  overflow-wrap:break-word;
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+}
+
+:focus-visible{outline:4px solid var(--focus);outline-offset:3px;}
+
+/* ── 상단 도구 ────────────────────────────────────────────────── */
+.deckbar{
+  position:fixed;top:0;left:0;right:0;z-index:20;
+  display:flex;gap:.6rem;flex-wrap:wrap;align-items:center;
+  padding:.6rem 1rem;
+  background:var(--paper-2);
+  border-bottom:1px solid var(--rule);
+}
+.deckbar button,.decknav button{
+  font:inherit;
+  font-size:clamp(14px,1.7vmin,18px);
+  color:var(--ink);
+  background:var(--paper-3);
+  border:2px solid var(--rule-strong);
+  border-radius:10px;
+  padding:.5rem 1rem;
+  min-height:44px;
+  cursor:pointer;
+}
+.deckbar button:hover,.decknav button:hover{background:var(--sand-soft);}
+.deckbar button[disabled],.decknav button[disabled]{opacity:.45;cursor:default;}
+
+/* ── 슬라이드 ─────────────────────────────────────────────────── */
+.slide-container{
+  position:absolute;top:60px;bottom:64px;left:0;right:0;
+  touch-action:pan-y;
+}
+.slide{
+  display:none;
+  height:100%;
+  overflow-y:auto;
+  max-width:1180px;
+  margin:0 auto;
+  padding:4vh 5vw 6vh;
+}
+.slide.active{display:block;}
+
+.eyebrow{
+  font-size:clamp(14px,1.8vmin,19px);
+  letter-spacing:.02em;
+  color:var(--ink-mute);
+  margin-bottom:.6rem;
+}
+.deck-h1{
+  font-size:clamp(30px,5.4vmin,62px);
+  line-height:1.22;
+  margin:0 0 1.2rem;
+  letter-spacing:-.01em;
+}
+.deck-h2{
+  font-size:clamp(26px,4.4vmin,54px);
+  line-height:1.28;
+  margin:0 0 1.3rem;
+  letter-spacing:-.01em;
+}
+.slide h3{
+  font-size:clamp(19px,2.8vmin,30px);
+  margin:1.8rem 0 .6rem;
+  color:var(--ink-soft);
+}
+.slide p,.slide li{
+  font-size:clamp(18px,2.7vmin,30px);
+  margin:.5rem 0;
+}
+.slide ul,.slide ol{margin:.8rem 0 1.3rem;padding-left:1.5em;}
+.slide li{margin-bottom:.7rem;}
+.byline{color:var(--ink-soft);font-size:clamp(16px,2.2vmin,24px);}
+
+em{font-style:normal;color:var(--coral);font-weight:700;}
+strong{font-weight:700;background:linear-gradient(transparent 58%, var(--green-soft) 58%);}
+
+.point{
+  color:var(--ink);
+  font-weight:700;
+  border-left:6px solid var(--coral);
+  background:var(--coral-soft);
+  padding:.8rem 1rem;
+  border-radius:0 10px 10px 0;
+  margin:1.4rem 0 0;
+}
+
+.big-quote{
+  font-family:var(--serif);
+  font-size:clamp(24px,4vmin,46px);
+  line-height:1.45;
+  padding:1.2rem 0 1.2rem 1.4rem;
+  border-left:8px solid var(--blue);
+}
+.huge-q{
+  font-size:clamp(28px,5.2vmin,64px);
+  line-height:1.3;
+  font-weight:700;
+  text-align:center;
+  padding:6vh 0;
+}
+
+.cards{display:flex;gap:1rem;flex-wrap:wrap;margin:1.2rem 0;}
+.card{
+  flex:1 1 260px;
+  background:var(--paper-2);
+  border:1px solid var(--rule);
+  border-radius:14px;
+  padding:1.1rem 1.2rem;
+  box-shadow:var(--shadow-soft);
+}
+.card-num{
+  font-size:clamp(13px,1.7vmin,17px);
+  color:var(--ink-mute);
+  margin-bottom:.3rem;
+}
+.card h3{margin:0 0 .4rem;color:var(--ink);font-size:clamp(19px,2.6vmin,28px);}
+.card p{font-size:clamp(16px,2.2vmin,24px);}
+.card.accent-blue{border-top:6px solid var(--blue);}
+.card.accent-green{border-top:6px solid var(--green);}
+.card.accent-coral{border-top:6px solid var(--coral);}
+
+.chips{display:flex;gap:.5rem;flex-wrap:wrap;margin:.9rem 0 1.2rem;}
+.chip{
+  font-size:clamp(15px,2vmin,22px);
+  background:var(--blue-soft);
+  border-radius:999px;
+  padding:.35rem .9rem;
+}
+
+.warn-box{
+  background:var(--coral-soft);
+  border:2px solid var(--coral);
+  border-radius:14px;
+  padding:1.2rem 1.3rem;
+  margin:1.2rem 0;
+}
+
+.mark{
+  background:var(--paper-3);
+  border:1px solid var(--rule);
+  border-left:8px solid var(--blue);
+  border-radius:12px;
+  padding:1rem 1.2rem;
+  margin:1.1rem 0 1.3rem;
+}
+.mark p{margin:.35rem 0;font-size:clamp(17px,2.4vmin,26px);}
+
+a{color:#2f6ae0;}
+
+/* ── 사진·영상 ────────────────────────────────────────────────
+   사진 전면 슬라이드는 제목과 캡션만 곁들인다. 목록을 함께 얹으면 화면이 넘쳐
+   발표 중 스크롤이 필요해진다. 설명은 다음 슬라이드에 둔다. */
+.shot{margin:.6rem 0 0;text-align:center;}
+.shot img{
+  max-width:100%;max-height:56vh;
+  border-radius:14px;box-shadow:var(--shadow-card);
+}
+.shot figcaption,.shots figcaption{
+  margin-top:.7rem;
+  font-size:clamp(15px,2vmin,22px);
+  color:var(--ink-soft);
+  line-height:1.5;
+}
+.shots{display:flex;gap:1rem;flex-wrap:wrap;margin:.6rem 0 0;}
+.shots figure{flex:1 1 260px;margin:0;text-align:center;}
+.shots img{
+  width:100%;height:38vh;object-fit:contain;
+  border-radius:12px;background:var(--paper-3);
+}
+.credit{font-size:clamp(13px,1.7vmin,18px);color:var(--ink-mute);margin-top:.5rem;}
+
+.filmstrip{margin:.6rem 0 0;text-align:center;}
+.filmstrip video{
+  max-width:100%;max-height:56vh;
+  border-radius:14px;background:#000;box-shadow:var(--shadow-card);
+}
+.filmstrip figcaption{
+  margin-top:.7rem;
+  font-size:clamp(15px,2vmin,22px);
+  color:var(--ink-soft);
+}
+
+/* ── 설문 차트 ────────────────────────────────────────────────
+   막대와 도넛은 카드가 등장하기 전엔 0이고 등장할 때 원래 값으로 자란다.
+   인라인 --w와 stroke-dasharray 값을 건드리지 않아 앞뒤로 오가도 수치가 보존된다. */
+.chart-card{
+  margin-top:1rem;
+  background:var(--paper-2);border:1px solid var(--rule);
+  border-radius:20px;padding:1.6rem 1.8rem;box-shadow:var(--shadow-card);
+}
+.chart-rows{display:flex;flex-direction:column;gap:1.6rem;}
+.chart-row{display:grid;grid-template-columns:170px 1fr 150px;gap:1.2rem;align-items:center;}
+.row-label{font-weight:700;font-size:clamp(16px,2.2vmin,24px);}
+.row-bar{position:relative;height:34px;background:var(--paper-3);border-radius:17px;overflow:hidden;}
+.row-fill{position:absolute;left:0;top:0;bottom:0;width:var(--w,0%);border-radius:17px;transition:width 1.2s var(--ease-soft);}
+.chart-row.r1 .row-fill{background:linear-gradient(90deg,var(--coral),#FF9E94);}
+.chart-row.r2 .row-fill{background:linear-gradient(90deg,var(--green),#5DCFA0);}
+.chart-row.r3 .row-fill{background:linear-gradient(90deg,var(--blue),#8AAEFF);}
+.row-end{display:flex;flex-direction:column;align-items:flex-end;gap:.3rem;}
+.row-score{font-weight:700;font-size:clamp(24px,3.4vmin,40px);line-height:1;font-variant-numeric:tabular-nums;}
+.row-score .denom{font-size:.42em;color:var(--ink-mute);font-weight:500;margin-left:.2em;}
+.row-pos{font-weight:600;font-size:clamp(13px,1.6vmin,17px);color:#fff;padding:.2em .7em;border-radius:999px;font-variant-numeric:tabular-nums;}
+.chart-row.r1 .row-pos{background:var(--coral);}
+.chart-row.r2 .row-pos{background:var(--green);}
+.chart-row.r3 .row-pos{background:var(--blue);}
+.chart-foot{
+  margin-top:1.4rem;padding-top:1rem;border-top:1px dashed var(--rule);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem;
+  font-size:clamp(14px,1.8vmin,19px);color:var(--ink-mute);
+}
+
+.dual-chart{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.8rem;}
+.chart-pane{
+  flex:1 1 320px;
+  background:var(--paper-2);border:1px solid var(--rule);
+  border-radius:18px;padding:1.3rem 1.4rem;box-shadow:var(--shadow-soft);
+}
+.pane-title{font-weight:600;font-size:clamp(15px,1.9vmin,20px);color:var(--ink-mute);margin-bottom:1rem;}
+.donut-wrap{display:flex;gap:1.2rem;align-items:center;flex-wrap:wrap;}
+.donut{position:relative;width:180px;height:180px;flex-shrink:0;}
+.donut svg{width:100%;height:100%;transform:rotate(-90deg);}
+.donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+.dc-num{font-weight:700;font-size:2rem;color:var(--green);line-height:1;}
+.dc-cap{margin-top:.3em;font-size:.85rem;color:var(--ink-mute);}
+.donut-legend{display:flex;flex-direction:column;gap:.6rem;flex:1;min-width:170px;}
+.legend-row{display:flex;align-items:center;gap:.7em;font-size:clamp(15px,1.9vmin,20px);}
+.legend-row .sw{width:14px;height:14px;border-radius:4px;flex-shrink:0;}
+.legend-row.lg-a .sw{background:var(--coral);}
+.legend-row.lg-b .sw{background:var(--green);}
+.legend-row.lg-c .sw{background:var(--sand);}
+.legend-row .lg-pct{margin-left:auto;font-weight:700;font-variant-numeric:tabular-nums;}
+.legend-row.lg-a .lg-pct{color:var(--coral);}
+.legend-row.lg-b .lg-pct{color:var(--green);}
+.legend-row.lg-c .lg-pct{color:var(--ink-soft);}
+.zero-card{
+  margin-top:1.1rem;padding:.8rem 1rem;background:var(--coral-soft);border-radius:12px;
+  display:flex;align-items:center;gap:.8rem;font-weight:600;color:var(--ink);
+  font-size:clamp(15px,1.9vmin,20px);
+}
+.zero-card .z-num{font-weight:700;font-size:1.35rem;color:var(--coral);}
+
+.hbars{display:flex;flex-direction:column;gap:.9rem;}
+.hbar{display:grid;grid-template-columns:1fr auto;gap:.4em;align-items:end;}
+.hb-label{grid-column:1 / -1;font-size:clamp(15px,1.9vmin,20px);margin:0;}
+.hb-track{position:relative;height:22px;background:var(--paper-3);border-radius:11px;overflow:hidden;}
+.hb-fill{position:absolute;left:0;top:0;bottom:0;width:var(--w,0%);border-radius:11px;transition:width 1.2s var(--ease-soft);}
+.hbar.h1 .hb-fill{background:linear-gradient(90deg,var(--coral),#FF9E94);}
+.hbar.h2 .hb-fill{background:linear-gradient(90deg,var(--green),#5DCFA0);}
+.hbar.h3 .hb-fill{background:linear-gradient(90deg,var(--green),#5DCFA0);opacity:.85;}
+.hbar.h4 .hb-fill{background:linear-gradient(90deg,var(--blue),#8AAEFF);}
+.hbar.h5 .hb-fill{background:linear-gradient(90deg,var(--blue),#8AAEFF);opacity:.85;}
+.hb-pct{font-weight:800;font-size:clamp(16px,2vmin,21px);font-variant-numeric:tabular-nums;align-self:center;white-space:nowrap;padding-left:.4em;margin:0;}
+.hbar.h1 .hb-pct{color:var(--coral);}
+.hbar.h2 .hb-pct,.hbar.h3 .hb-pct{color:var(--green);}
+.hbar.h4 .hb-pct,.hbar.h5 .hb-pct{color:var(--blue);}
+
+.chart-card:not(.frag-visible) .row-fill{width:0;}
+.chart-pane:not(.frag-visible) .hb-fill{width:0;}
+#donut-a,#donut-b,#donut-c{transition:stroke-dasharray .9s var(--ease-soft);}
+.chart-pane:not(.frag-visible) #donut-a,
+.chart-pane:not(.frag-visible) #donut-b,
+.chart-pane:not(.frag-visible) #donut-c{stroke-dasharray:0 502.65 !important;}
+
+/* ── 단계별 등장 ──────────────────────────────────────────────
+   visibility까지 숨기는 것이 핵심이다. opacity만 0으로 두면 DOM에 살아 있어
+   Tab이 등장 전 링크를 잡고 스크린 리더가 미리 읽는다. */
+.fragment{opacity:0;transform:translateY(14px);visibility:hidden;}
+.fragment.frag-visible{
+  opacity:1;transform:none;visibility:visible;
+  animation:frag-in .55s var(--ease-soft);
+}
+@keyframes frag-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.card.fragment{transform:translateY(18px) scale(.985);}
+.card.frag-visible{transform:none;}
+
+/* ── 진행 표시·하단 이동 ──────────────────────────────────────── */
+.progress-track{
+  position:fixed;top:0;left:0;right:0;height:3px;z-index:30;
+  background:transparent;
+}
+.progress{height:100%;width:0;background:var(--blue);transition:width .3s var(--ease-soft);}
+
+.decknav{
+  position:fixed;left:0;right:0;bottom:0;z-index:20;
+  display:flex;align-items:center;justify-content:center;gap:1rem;
+  padding:.6rem 1rem;
+  background:var(--paper-2);
+  border-top:1px solid var(--rule);
+}
+.counter{color:var(--ink-mute);font-size:clamp(14px,1.7vmin,18px);}
+
+/* ── 문서 모드 ────────────────────────────────────────────────
+   같은 DOM을 CSS로만 펼친다. 내용을 두 벌로 만들지 않는다. */
+body.doc{overflow:auto;}
+body.doc .slide-container{position:static;padding-top:64px;}
+body.doc .slide{
+  display:block;
+  height:auto;
+  overflow:visible;
+  padding:2.5rem 5vw;
+  border-bottom:1px solid var(--rule);
+}
+body.doc .fragment{opacity:1;transform:none;visibility:visible;animation:none;}
+body.doc .decknav,body.doc .progress-track{display:none;}
+body.doc .shot img,body.doc .filmstrip video{max-height:none;}
+body.doc .shots img{height:auto;}
+
+/* ── 반응형 ─────────────────────────────────────────────────── */
+@media (max-width:820px){
+  .chart-row{grid-template-columns:1fr;gap:.5rem;}
+  .row-end{flex-direction:row;align-items:center;gap:1rem;}
+}
+@media (max-width:700px){
+  .slide{padding:3vh 6vw 5vh;}
+  .cards,.shots,.dual-chart{flex-direction:column;}
+  .shots img{height:auto;}
+}
+@media (max-width:480px){
+  .deckbar{gap:.4rem;padding:.5rem .6rem;}
+  .deckbar button,.decknav button{padding:.5rem .7rem;min-height:44px;}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important;}
+  .fragment{transform:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="progress-track"><div class="progress" id="progress"></div></div>
+
+<div class="deckbar">
+  <button type="button" id="modeBtn">문서 모드로 보기</button>
+  <button type="button" id="narrBtn" aria-pressed="true">내레이션 켬</button>
+  <button type="button" id="sfxBtn" aria-pressed="true">효과음 켬</button>
+</div>
+
+<main class="slide-container" id="deck">
+
+<!-- 1 · 표지 -->
+<div class="slide">
+  <h1 class="deck-h1">내가 만난 배리어프리 교육과 전시</h1>
+  <p class="byline">김헌용 · 신명중학교 영어 교사, 함께하는장애인교원노동조합 위원장</p>
+  <p class="byline">2026년 8월 14일(금) · 국립생물자원관 교육강사 워크숍</p>
+  <p class="byline">나인트리 프리미어 로카우스 호텔 서울 용산 9층 안중근실</p>
+</div>
+
+<!-- 2 · 오늘 나눌 이야기 -->
+<div class="slide">
+  <p class="eyebrow">들어가며</p>
+  <h2 class="deck-h2">오늘 나눌 이야기</h2>
+  <ul>
+    <li class="fragment">전시기관에서 받은 설명이 어떻게 달랐는지</li>
+    <li class="fragment">촉각으로 경험한 전시물</li>
+    <li class="fragment">같은 원칙으로 만든 학습자료와 학생들의 평가</li>
+    <li class="fragment">전시 교육 현장에 옮길 수 있는 항목</li>
+  </ul>
+</div>
+
+<!-- 3 · 자기소개 영상 -->
+<div class="slide">
+  <h2 class="deck-h2">내가 만난 세상</h2>
+  <figure class="filmstrip">
+    <video src="video/jerrybag.mp4" controls preload="metadata" width="960"></video>
+    <figcaption>제리백 「Way to go」 · 2분 34초 · 한국어 자막 포함</figcaption>
+  </figure>
+</div>
+
+<!-- 4 · 두 개의 자리 -->
+<div class="slide">
+  <p class="eyebrow">여섯 살에 시력을 잃고 맹학교에서 열두 해, 2010년부터 중등 영어 교사</p>
+  <h2 class="deck-h2">두 개의 자리</h2>
+  <div class="cards">
+    <div class="card accent-blue fragment">
+      <p class="card-num">설명을 받는 위치</p>
+      <h3>여행과 전시 관람</h3>
+      <p>세계를 이해하는 방식을 바꾸어 온 학습의 과정. 어떤 곳에서는 아무것도 얻지 못한 채 나왔고, 어떤 곳에서는 예정된 시간을 크게 넘겨서까지 몰입했다.</p>
+    </div>
+    <div class="card accent-green fragment">
+      <p class="card-num">설명하는 자리</p>
+      <h3>교실</h3>
+      <p>정해진 내용을 정해진 시간 안에 전달해야 하고, 그 앞에는 조건이 서로 다른 서른 명의 학생이 앉아 있다.</p>
+    </div>
+  </div>
+  <p class="point">그 차이를 만든 것은 관람자의 감각이 아니라 그곳이 준비한 인프라와 서비스였다.</p>
+</div>
+
+<!-- 5 · 1장 표지 -->
+<div class="slide">
+  <p class="eyebrow">1</p>
+  <h2 class="deck-h2">배제하는 가이드와 포용하는 가이드</h2>
+  <div class="chips">
+    <span class="chip">뮤지엄 산</span>
+    <span class="chip">반 고흐 미술관</span>
+    <span class="chip">국립중앙박물관</span>
+  </div>
+</div>
+
+<!-- 6 · 뮤지엄 산 -->
+<div class="slide">
+  <p class="eyebrow">교직원 연수</p>
+  <h2 class="deck-h2">뮤지엄 산</h2>
+  <ul>
+    <li>동료 교사들은 도슨트를 따라 정원에서 건물로, 건물에서 작품으로 시선을 옮기며 작품 세계와 만나고 있었다</li>
+    <li class="fragment">나는 그 거대한 작품 속에서 낙오되었고, 걸으면서 입술을 수도 없이 깨물었다</li>
+    <li class="fragment">그날의 해설은 나쁘지 않았다. 오히려 <strong>좋은 해설</strong>이었고, 그래서 더 관람에 적극적으로 참여하고 싶었다</li>
+    <li class="fragment"><em>흰지팡이를 들고 있는 것을 뻔히 보면서도</em> 가이드는 내게 다가오지 않았다</li>
+  </ul>
+  <p class="point">나는 그저 남들과 똑같이 행렬을 따라다니며 눈으로 감상하는 또 한 명의 관람객으로 치부됐다.</p>
+</div>
+
+<!-- 7 · 필링 반 고흐 -->
+<div class="slide">
+  <p class="eyebrow">2023년 겨울 · 암스테르담</p>
+  <h2 class="deck-h2">필링 반 고흐</h2>
+  <figure class="shot">
+    <img src="img/feeling-vangogh.jpg" alt="Feeling Van Gogh 프로그램 표기 앞에서 웃고 있는 김헌용">
+    <figcaption>반 고흐 미술관의 시각장애인을 위한 프로그램 「필링 반 고흐」</figcaption>
+  </figure>
+</div>
+
+<!-- 8 · 나탈리의 해설 -->
+<div class="slide">
+  <h2 class="deck-h2">나탈리의 해설</h2>
+  <figure class="shot">
+    <img src="img/natalie-relief.jpg" alt="청록색 벽에 걸린 반 고흐의 자화상 앞. 스태프 명찰을 단 나탈리가 손을 뻗어 김헌용 무릎 위의 흰 양각 선화를 짚어 준다. 김헌용의 왼손에는 물감이 도톰하게 입체로 붙은 나무 팔레트 모형이 들려 있다">
+    <figcaption>그림을 선으로 옮긴 양각 자료와, 초상화 속 팔레트를 실물로 만든 모형</figcaption>
+  </figure>
+</div>
+
+<!-- 9 · 나탈리가 한 일 -->
+<div class="slide">
+  <h2 class="deck-h2">나탈리가 한 일</h2>
+  <ul>
+    <li class="fragment">시작하기 전에 내 <em>시력 상태</em>를 물었다</li>
+    <li class="fragment">자기 외모를 먼저 설명했다</li>
+    <li class="fragment">간이의자를 준비해 그림 앞에 나를 앉혔다</li>
+    <li class="fragment">자리를 옮길 때마다 주머니에서 양각 자료를 꺼냈다</li>
+    <li class="fragment">팔레트 모형을 <strong>그림과 같은 방향으로</strong> 내 손에 쥐여 주었다</li>
+    <li class="fragment">붓질의 방향을 설명할 때는 <em>내 등에 손가락으로 선을 그었다</em></li>
+  </ul>
+</div>
+
+<!-- 10 · 감자 먹는 사람들 영상 -->
+<div class="slide">
+  <h2 class="deck-h2">능숙하게 설명하는 가이드</h2>
+  <figure class="filmstrip">
+    <video src="video/natalie-explains.mp4" controls preload="metadata" width="960"></video>
+    <figcaption>「감자 먹는 사람들」 앞. 나탈리가 그림을 설명하고, 나는 촉각 그림을 만지며 듣는다</figcaption>
+  </figure>
+</div>
+
+<!-- 11 · 촉각 자료 영상 -->
+<div class="slide">
+  <h2 class="deck-h2">촉각 자료를 손에 쥐여 주었다</h2>
+  <figure class="filmstrip">
+    <video src="video/sunflowers-touch.mp4" controls preload="metadata" width="960"></video>
+    <figcaption>「해바라기」 앞에서 촉각 자료를 만지는 장면</figcaption>
+  </figure>
+</div>
+
+<!-- 12 · 관람객이 물러난 자리 -->
+<div class="slide">
+  <h2 class="deck-h2">그림 앞에 나를 앉혔다</h2>
+  <figure class="shot">
+    <img src="img/potato-eaters.jpg" alt="「감자 먹는 사람들」 정중앙 앞에 놓인 간이의자에 앉아 촉각 자료를 무릎에 올린 김헌용. 다른 관람객들이 그 앞 공간을 내주고 물러나 있다">
+    <figcaption>그림 정중앙 앞자리. 다른 관람객들이 공간을 내주고 물러났다</figcaption>
+  </figure>
+</div>
+
+<!-- 13 · 사람들이 모여들었다 -->
+<div class="slide">
+  <h2 class="deck-h2">사람들이 모여들었다</h2>
+  <ul>
+    <li>해설이 정보 전달이 아니라 <strong>대화 형태</strong>로 이어졌다</li>
+    <li class="fragment">그림 앞에서 내가 느낀 것을 말하면 나탈리는 그 감상을 받아 이야기를 이어 갔다</li>
+    <li class="fragment">지나가던 다른 관람객들이 하나둘 모여들어 함께 들었다</li>
+    <li class="fragment">예정 시간을 크게 넘긴 <em>한 시간 사십 분</em>이 지나서야 투어가 끝났다</li>
+  </ul>
+  <p class="point">시각장애인 한 사람을 위해 준비한 해설이 다른 사람들에게도 무척이나 감명 깊었던 모양이었다.</p>
+</div>
+
+<!-- 14 · 어느 수집가의 초대 -->
+<div class="slide">
+  <p class="eyebrow">2022년 여름 · 국립중앙박물관</p>
+  <h2 class="deck-h2">어느 수집가의 초대</h2>
+  <div class="shots">
+    <figure>
+      <img src="img/monet.jpg" alt="어두운 전시실에서 금색 액자에 든 모네의 가로로 긴 「수련이 있는 연못」 옆에 흰지팡이를 짚고 선 김헌용">
+      <figcaption>모네 「수련이 있는 연못」</figcaption>
+    </figure>
+    <figure>
+      <img src="img/leejungseop.jpg" alt="흰 벽에 걸린 작은 「황소」 옆에 배낭을 메고 정면을 향해 선 김헌용">
+      <figcaption>이중섭 「황소」</figcaption>
+    </figure>
+    <figure>
+      <img src="img/kimkichang.jpg" alt="세로로 큰 「소와 여인」 옆에 선 김헌용. 오른쪽에 「자연과 교감」 섹션 패널과 오디오가이드 헤드폰 표시가 함께 보인다">
+      <figcaption>김기창 「소와 여인」</figcaption>
+    </figure>
+  </div>
+</div>
+
+<!-- 15 · 전시의 설계도 -->
+<div class="slide">
+  <h2 class="deck-h2">전시의 설계도를 말로 건네받다</h2>
+  <ul>
+    <li class="fragment">일반 개관보다 한 시간 이른 시각에 <strong>시각장애인 관람 시간</strong>이 따로 열렸다</li>
+    <li class="fragment">시각장애인을 위해 별도로 제작한 오디오가이드가 준비되어 있었다</li>
+    <li class="fragment">전시를 총괄 기획한 학예연구관이 직접 해설을 맡았다</li>
+    <li class="fragment">작품을 <em>왜 그 자리에 걸었는지</em>, 조명을 어떻게 썼는지까지 이야기해 주었다</li>
+  </ul>
+  <p class="point">눈으로 볼 수 없는 전시의 설계도를 말로 건네받은 셈이다.</p>
+</div>
+
+<!-- 16 · 세 곳의 차이 -->
+<div class="slide">
+  <h2 class="deck-h2">세 곳의 차이</h2>
+  <div class="cards">
+    <div class="card accent-coral fragment">
+      <p class="card-num">뮤지엄 산</p>
+      <h3>준비가 부족했다</h3>
+      <p>나와 같은 다양한 관람객을 맞을 준비가 부족했다.</p>
+    </div>
+    <div class="card accent-blue fragment">
+      <p class="card-num">반 고흐 미술관</p>
+      <h3>교구와 가이드</h3>
+      <p>특별 제작된 교구와 능숙한 가이드가 있었다.</p>
+    </div>
+    <div class="card accent-green fragment">
+      <p class="card-num">국립중앙박물관</p>
+      <h3>설계한 프로그램</h3>
+      <p>장애인 관람객을 위해 설계한 프로그램이 있었다.</p>
+    </div>
+  </div>
+  <p class="point">소장한 작품 자체보다는 전달하는 방식과 관람객을 맞이하는 태도의 차이였다.</p>
+</div>
+
+<!-- 17 · 2장 표지 -->
+<div class="slide">
+  <p class="eyebrow">2</p>
+  <h2 class="deck-h2">촉각 경험의 의미</h2>
+  <p class="big-quote">hands-on experience<br>글자 그대로 풀면 손을 올려놓는 경험</p>
+</div>
+
+<!-- 18 · 촉감은 존재를 증언한다 -->
+<div class="slide">
+  <h2 class="deck-h2">촉감은 존재를 증언한다</h2>
+  <ul>
+    <li>점자를 읽을 때도, 처음 만난 사람과 악수할 때도, 낯선 길을 더듬을 때도 <em>손끝이 곧 나의 시선</em>이다</li>
+    <li class="fragment">촉각으로 경험한 세상은 실제적이며 직접적이다</li>
+    <li class="fragment">비록 촉감이 언제나 섬세한 것은 아니지만, 생생한 상상을 불러일으키기에는 충분하다</li>
+  </ul>
+  <p class="point">촉각 자료는 대상을 완벽하게 재현하지는 못하더라도 새로운 앎으로 이어지는 단단한 토대를 놓아 준다.</p>
+</div>
+
+<!-- 19 · 건축 모형 -->
+<div class="slide">
+  <p class="eyebrow">한 기관의 선의라기보다 도시들이 공유하는 관행</p>
+  <h2 class="deck-h2">건축 모형</h2>
+  <div class="shots">
+    <figure>
+      <img src="img/cologne-model.jpg" alt="쾰른 구시가 광장의 콘크리트 받침 위에 놓인 청동 모형. 대성당 첨탑과 지붕과 골목까지 재현되어 있고, 김헌용이 손으로 성당 부분을 만지고 있다">
+      <figcaption>쾰른 구시가 광장의 청동 모형</figcaption>
+    </figure>
+    <figure>
+      <img src="img/antwerp-model.jpg" alt="안트워프 성모마리아 대성당 앞에 놓인 미니어처를 두 손으로 만지는 김헌용">
+      <figcaption>안트워프 대성당 앞의 미니어처</figcaption>
+    </figure>
+  </div>
+</div>
+
+<!-- 20 · 이동에 쓰는 지도 -->
+<div class="slide">
+  <p class="eyebrow">반 고흐 미술관 로비</p>
+  <h2 class="deck-h2">이동에 쓰는 지도</h2>
+  <figure class="shot">
+    <img src="img/braille-map.jpg" alt="나무 테이블 위에 미술관 전체를 회색 입체로 재현한 모형. 구관과 신관과 타원형 로비의 층 구조가 드러나 있고, 앞쪽 경사 패널에 네덜란드어와 영어와 점자를 병기한 범례가 붙어 있다">
+    <figcaption>현재 위치와 비상구, 엘리베이터, 기둥, 벽이 점자로 표시되어 있다</figcaption>
+  </figure>
+</div>
+
+<!-- 21 · 점자 범례 -->
+<div class="slide">
+  <h2 class="deck-h2">점자 범례가 붙어 있었다</h2>
+  <figure class="filmstrip">
+    <video src="video/braille-map.mp4" controls preload="metadata" width="960"></video>
+    <figcaption>모형 앞쪽 경사면의 점자 범례를 손으로 확인하는 장면</figcaption>
+  </figure>
+  <p class="point">만져 보고 감탄하라고 놓은 조형물이 아니라 실제로 이동에 쓰는 지도였다.</p>
+</div>
+
+<!-- 22 · 촉지도가 드문 곳 -->
+<div class="slide">
+  <h2 class="deck-h2">교육 시설일수록 아쉽다</h2>
+  <ul>
+    <li>우리나라에도 공공기관마다 입구에 <strong>촉지도</strong>가 설치된 경우가 많다</li>
+    <li class="fragment">하지만 미술관이나 전시관 같은 공간에는 드물다</li>
+    <li class="fragment">시설 자체가 교육 목적으로 세워진 곳일수록 촉지도의 <em>교육적 효과</em>가 클 텐데 아쉬운 일이다</li>
+  </ul>
+</div>
+
+<!-- 23 · 경기장의 소장품 -->
+<div class="slide">
+  <p class="eyebrow">올해 초 · 레알 마드리드 홈 구장</p>
+  <h2 class="deck-h2">경기장의 소장품</h2>
+  <figure class="shot">
+    <img src="img/stadium-boot.jpg" alt="경기장 소품실에서 흰지팡이를 옆에 세워 둔 채, 천을 덮은 탁자 위의 낡은 축구화를 두 손으로 만지는 장면. 스터드에 마른 잔디가 끼어 있고 뒤편에 유니폼과 트로피가 흐리게 보인다">
+    <figcaption>골키퍼의 유니폼, 우승 트로피, 우승 당시의 축구공, 선수가 실제로 신고 뛴 축구화</figcaption>
+    <p class="credit">현장 사진을 대신해 생성한 이미지입니다</p>
+  </figure>
+</div>
+
+<!-- 24 · 절차 -->
+<div class="slide">
+  <h2 class="deck-h2">주목할 것은 절차였다</h2>
+  <ul>
+    <li>축구화에는 선수를 상징하는 글자가 양각으로 새겨져 있었고 <em>잔디의 푸른 물이 아직 빠지지 않은 채</em>였다</li>
+    <li class="fragment">사진과 중계로만 존재하던 것들이 손안에서 크기와 무게와 질감을 얻었다</li>
+    <li class="fragment"><strong>사전 예약도 별도 요청도 없었다.</strong> 입구에서 흰지팡이를 본 직원이 무전을 쳤고, 동선을 파악해 투어 막바지에 자연스럽게 안내했다</li>
+    <li class="fragment">한국에서는 대부분 복잡한 사전 신청을 요구하거나, 막상 가면 담당자가 없다는 답이 돌아온다</li>
+  </ul>
+  <p class="point">준비된 자료가 있어도 그것을 꺼내 주는 절차가 무거우면 관람객에게는 없는 것과 같다.</p>
+</div>
+
+<!-- 25 · 소리를 촉감으로 -->
+<div class="slide">
+  <p class="eyebrow">2025년 3월 · 국립중앙박물관 「공간_사이」</p>
+  <h2 class="deck-h2">소리를 촉감으로 느끼다</h2>
+  <div class="shots">
+    <figure>
+      <img src="img/gonggan-sai-2.jpg" alt="4미터 높이의 미디어아트 앞에 선 관람객. 화면에 종의 형태가 무수한 빛의 입자로 그려져 있다">
+      <figcaption>종소리를 눈으로 보여 주는 미디어아트</figcaption>
+    </figure>
+    <figure>
+      <img src="img/gonggan-sai.jpg" alt="전시대 위의 범종 축소 모형에 두 손을 얹은 관람객. 옆 패널에 아바타 수어 영상 화면과 점자 안내가 함께 있다">
+      <figcaption>만져 볼 수 있는 축소 모형과 아바타 수어</figcaption>
+    </figure>
+  </div>
+  <p class="credit">사진 출처: 뉴시스</p>
+</div>
+
+<!-- 26 · 몸으로 알게 되었다 -->
+<div class="slide">
+  <h2 class="deck-h2">몸으로 알게 되었다</h2>
+  <ul>
+    <li>청음 의자에 앉으면 <em>종소리의 진동이 몸으로 전해진다</em></li>
+    <li class="fragment">저주파를 재현하는 소리가 울리고, 4미터 높이의 미디어아트가 그 소리를 눈으로 보여 준다</li>
+    <li class="fragment">시각장애인 관람객에게는 음성 해설이, 청각장애인 관람객에게는 아바타 수어가 준비되어 있다</li>
+    <li class="fragment">성덕대왕 신종의 축소 모형과 종을 만드는 재료도 만져 볼 수 있다</li>
+    <li class="fragment"><strong>이 공간은 예약도 계획도 필요 없다</strong></li>
+  </ul>
+  <p class="point">특별한 사람을 위해 특별한 날에 여는 자리가 아니라 아무 때나 스며들 수 있는 자리로 만든 것이다.</p>
+</div>
+
+<!-- 27 · 점자가 새겨진 카드 -->
+<div class="slide">
+  <h2 class="deck-h2">점자가 새겨진 카드</h2>
+  <ul>
+    <li>이탈리아인 지인에게 받은 우노. <strong>모든 장에 점자가 새겨진 카드</strong>였다</li>
+    <li class="fragment">여럿이 모여 하는 게임은 대부분 동작을 쓰는 시각적 게임이라, 낄 수도 없고 자리를 뜰 수도 없는 상태가 이어졌다</li>
+    <li class="fragment">웃음이 터질 때마다 따라 웃었지만 <em>무엇이 우스운지는 끝내 알 수 없었다</em></li>
+    <li class="fragment">통합이나 포용을 이야기할 때 우리는 좀처럼 <strong>함께 놀 권리</strong>를 떠올리지 못한다</li>
+  </ul>
+  <p class="point">촉각은 시각 설명을 보조하는 수단이 아니라 그 자체로 독립된 인식의 경로이다.</p>
+</div>
+
+<!-- 28 · 3장 표지 -->
+<div class="slide">
+  <p class="eyebrow">3</p>
+  <h2 class="deck-h2">한 학생을 위한 설계, 모든 학생을 위한 수업</h2>
+  <p>여기까지가 내가 세상을 만나 온 방식이다. 이번에는 반대로 내가 설명하는 위치에서 어떻게 내 수업을 다양한 감각으로 전환하고자 노력하고 있는지 소개한다.</p>
+</div>
+
+<!-- 29 · 설계 단계의 접근성 -->
+<div class="slide">
+  <h2 class="deck-h2">설계 단계의 접근성</h2>
+  <ul>
+    <li>내가 수업에 쓰는 자료는 무엇보다 <strong>내가 화면 낭독기로 직접 다룰 수 있어야</strong> 한다</li>
+    <li class="fragment">아무리 잘 만든 버튼이 있어도 그 버튼에 이름이 붙어 있지 않으면 나는 그것을 누를 수 없다</li>
+    <li class="fragment">그래서 완성한 뒤에 접근성을 덧붙이는 방식을 택할 수 없었다</li>
+    <li class="fragment">화면을 읽어 주는 음성과 키보드만으로 가능한 조작은 <em>글을 빨리 읽지 못하는 학생과 마우스가 서툰 학생</em>에게도 그대로 쓰였다</li>
+  </ul>
+  <p class="point">누구든 장벽 없이 들어올 수 있는 포용성과, 한 번 들어온 학생을 끝까지 머물게 하는 몰입감.</p>
+</div>
+
+<!-- 30 · UDL과 멀티모달 -->
+<div class="slide">
+  <h2 class="deck-h2">보편적 학습 설계와 다중 감각 구현</h2>
+  <ul>
+    <li>처음부터 다양한 학습자의 스펙트럼을 고려해 배움의 환경을 <strong>유연하게 설계</strong>한다</li>
+    <li class="fragment">학습 내용을 여러 방식으로 제시하고, 이해한 바를 여러 방식으로 표현하게 한다</li>
+    <li class="fragment">하나의 학습 목표를 소리와 텍스트, 시각적 이미지, 직접 조작, 즉각적 피드백으로 동시에 구현한다</li>
+  </ul>
+  <div class="mark fragment">
+    <p>국립중앙박물관의 「공간_사이」가 종소리에 한 일과 구조가 같다.</p>
+    <p>소리를 듣기 어려운 사람은 진동과 화면으로, 화면을 보기 어려운 사람은 소리와 진동으로 같은 내용을 얻는다.</p>
+  </div>
+  <p class="point">어느 한 경로가 차단된 학습자도 다른 경로로 참여할 수 있다.</p>
+</div>
+
+<!-- 31 · Word Bomb -->
+<div class="slide">
+  <p class="eyebrow">사례 하나 · 공강 30분</p>
+  <h2 class="deck-h2">Word Bomb</h2>
+  <div class="chips">
+    <span class="chip">흑백 영영풀이 학습지</span>
+    <span class="chip">큼직한 시각 카드</span>
+    <span class="chip">단어를 읽어 주는 음성</span>
+    <span class="chip">카운트다운</span>
+    <span class="chip">연속 정답 배수</span>
+    <span class="chip">무한 재도전</span>
+  </div>
+  <ul>
+    <li class="fragment">한 문장을 요청했고, 단일 HTML 파일로 작동하는 웹 게임이 완성되기까지 <em>30분</em>이 걸렸다</li>
+    <li class="fragment">학습지 위에서 평면적이던 활자 하나가 시각과 청각과 반응 시간을 아우르는 활동으로 바뀌었다</li>
+    <li class="fragment">눈빛이 멍해지던 학생부터 가장 빨리 푸는 학생까지 <strong>각자의 속도로 동시에 참여</strong>했다</li>
+    <li class="fragment"><a href="https://engccer.github.io/word-bomb-L1/" target="_blank" rel="noopener">Word Bomb 열기, engccer.github.io/word-bomb-L1</a></li>
+  </ul>
+  <p class="point">학습 콘텐츠 자체는 그대로 두고 그 콘텐츠로 들어가는 경로를 늘리는 것이다.</p>
+</div>
+
+<!-- 32 · Pick Me -->
+<div class="slide">
+  <p class="eyebrow">사례 둘 · 수업 운영 도구</p>
+  <h2 class="deck-h2">Pick Me</h2>
+  <p class="big-quote">시각적으로 화려하면서도<br>접근성을 완벽하게 갖춰 줘</p>
+  <ul>
+    <li class="fragment">3D 룰렛과 로또 추첨과 낚시, 세 가지 테마를 넣어 사흘 만에 초기 버전을 완성했다</li>
+    <li class="fragment">그 한 줄 덕분에 화면 낭독기용 레이블과 <strong>키보드 조작, 고대비 색상 테마</strong>가 자연스럽게 내장되었다</li>
+    <li class="fragment">학생들은 수업이 시작되면 오늘도 픽미를 하자고 먼저 외친다</li>
+    <li class="fragment"><a href="https://aro-deeply.github.io/pickme/" target="_blank" rel="noopener">Pick Me 열기, aro-deeply.github.io/pickme</a></li>
+  </ul>
+  <p class="point">접근성은 기술적으로 어렵거나 불가능했던 일이 아니라 개발의 우선순위에서 늘 뒤로 밀려 있었을 뿐이다.</p>
+</div>
+
+<!-- 33 · 학생들의 평가 -->
+<div class="slide">
+  <p class="eyebrow">2026년 5월 · 신명중학교 1학년 155명 익명 설문</p>
+  <h2 class="deck-h2">학생들의 평가</h2>
+  <div class="chart-card fragment" role="img" aria-labelledby="chart-a-desc">
+    <p class="sr-only" id="chart-a-desc">전체 만족도 5점 만점에 4.35점으로 긍정 응답 85.8퍼센트, 수업 집중도 4.17점으로 긍정 응답 80.0퍼센트, 영어 학습 도움 3.94점으로 긍정 응답 72.9퍼센트</p>
+    <div class="chart-rows">
+      <div class="chart-row r1">
+        <p class="row-label">전체 만족도</p>
+        <div class="row-bar" aria-hidden="true"><div class="row-fill" style="--w:87%"></div></div>
+        <div class="row-end">
+          <p class="row-score">4.35<span class="denom">/5</span></p>
+          <p class="row-pos">긍정 85.8%</p>
+        </div>
+      </div>
+      <div class="chart-row r2">
+        <p class="row-label">수업 집중도</p>
+        <div class="row-bar" aria-hidden="true"><div class="row-fill" style="--w:83.4%"></div></div>
+        <div class="row-end">
+          <p class="row-score">4.17<span class="denom">/5</span></p>
+          <p class="row-pos">긍정 80.0%</p>
+        </div>
+      </div>
+      <div class="chart-row r3">
+        <p class="row-label">영어 학습 도움</p>
+        <div class="row-bar" aria-hidden="true"><div class="row-fill" style="--w:78.8%"></div></div>
+        <div class="row-end">
+          <p class="row-score">3.94<span class="denom">/5</span></p>
+          <p class="row-pos">긍정 72.9%</p>
+        </div>
+      </div>
+    </div>
+    <div class="chart-foot">
+      <span>신명중학교 1학년 155명 익명 설문</span>
+      <span>2026년 5월</span>
+    </div>
+  </div>
+</div>
+
+<!-- 34 · 활용 희망과 도움받은 영역 -->
+<div class="slide">
+  <p class="eyebrow">앞으로의 활용 · 도움받은 영역</p>
+  <h2 class="deck-h2">더 자주 하자는 응답</h2>
+  <div class="dual-chart">
+    <div class="chart-pane fragment" role="img" aria-labelledby="chart-b-desc">
+      <p class="pane-title">앞으로도 미니게임을 활용했으면</p>
+      <p class="sr-only" id="chart-b-desc">더 자주 58.1퍼센트, 지금 정도 적당 34.8퍼센트, 잘 모르겠음 6.5퍼센트, 줄였으면 좋겠다 155명 중 1명으로 0.6퍼센트</p>
+      <div class="donut-wrap">
+        <div class="donut" aria-hidden="true">
+          <svg viewBox="0 0 200 200" aria-hidden="true">
+            <circle cx="100" cy="100" r="80" fill="none" stroke="#EFEADC" stroke-width="28"/>
+            <circle id="donut-a" cx="100" cy="100" r="80" fill="none" stroke="#FF7A6B" stroke-width="28"
+              stroke-dasharray="292 502.65" stroke-dashoffset="0" stroke-linecap="round"/>
+            <circle id="donut-b" cx="100" cy="100" r="80" fill="none" stroke="#36B37E" stroke-width="28"
+              stroke-dasharray="174.9 502.65" stroke-dashoffset="-292" stroke-linecap="round"/>
+            <circle id="donut-c" cx="100" cy="100" r="80" fill="none" stroke="#C7AE7E" stroke-width="28"
+              stroke-dasharray="32.7 502.65" stroke-dashoffset="-466.9" stroke-linecap="round"/>
+          </svg>
+          <div class="donut-center">
+            <span class="dc-num">92.9%</span>
+            <span class="dc-cap">유지 또는 확대</span>
+          </div>
+        </div>
+        <div class="donut-legend">
+          <p class="legend-row lg-a"><span class="sw" aria-hidden="true"></span><span>더 자주</span><span class="lg-pct">58.1%</span></p>
+          <p class="legend-row lg-b"><span class="sw" aria-hidden="true"></span><span>지금 정도 적당</span><span class="lg-pct">34.8%</span></p>
+          <p class="legend-row lg-c"><span class="sw" aria-hidden="true"></span><span>잘 모르겠음</span><span class="lg-pct">6.5%</span></p>
+        </div>
+      </div>
+      <p class="zero-card"><span class="z-num">1명</span><span>155명 가운데 줄였으면 좋겠다는 응답</span></p>
+    </div>
+
+    <div class="chart-pane fragment" role="img" aria-labelledby="chart-c-desc">
+      <p class="pane-title">가장 도움받은 영역, 복수 응답</p>
+      <p class="sr-only" id="chart-c-desc">재미 54.2퍼센트, 단어 50.3퍼센트, 본문 독해 48.4퍼센트, 문법 36.8퍼센트, 발음 30.3퍼센트</p>
+      <div class="hbars">
+        <div class="hbar h1">
+          <p class="hb-label">재미</p>
+          <div class="hb-track" aria-hidden="true"><div class="hb-fill" style="--w:54.2%"></div></div>
+          <p class="hb-pct">54.2%</p>
+        </div>
+        <div class="hbar h2">
+          <p class="hb-label">단어</p>
+          <div class="hb-track" aria-hidden="true"><div class="hb-fill" style="--w:50.3%"></div></div>
+          <p class="hb-pct">50.3%</p>
+        </div>
+        <div class="hbar h3">
+          <p class="hb-label">본문 독해</p>
+          <div class="hb-track" aria-hidden="true"><div class="hb-fill" style="--w:48.4%"></div></div>
+          <p class="hb-pct">48.4%</p>
+        </div>
+        <div class="hbar h4">
+          <p class="hb-label">문법</p>
+          <div class="hb-track" aria-hidden="true"><div class="hb-fill" style="--w:36.8%"></div></div>
+          <p class="hb-pct">36.8%</p>
+        </div>
+        <div class="hbar h5">
+          <p class="hb-label">발음</p>
+          <div class="hb-track" aria-hidden="true"><div class="hb-fill" style="--w:30.3%"></div></div>
+          <p class="hb-pct">30.3%</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 35 · 학습자 다양성의 증거 -->
+<div class="slide">
+  <h2 class="deck-h2">학습자 다양성의 증거</h2>
+  <ul>
+    <li>재미와 학습 효과가 분리되지 않고 <strong>함께 올라갔다</strong></li>
+    <li class="fragment">한 학생은 속도에 점수가 붙으니 풀이를 끝까지 읽지 않게 된다며 속도 배점을 없애 달라고 했다</li>
+    <li class="fragment">다른 학생은 속도가 점수에 거의 반영되지 않아 긴장감이 떨어진다며 배점을 높여 달라고 했다</li>
+    <li class="fragment">정반대의 요구는 <em>설계의 실패가 아니라 학습자 다양성의 증거</em>다</li>
+  </ul>
+  <p class="point">반 고흐 미술관에서 관람객들이 모여든 것과 같은 결과를 교실에서 수치로 확인한 셈이다.</p>
+</div>
+
+<!-- 36 · 4장 표지 -->
+<div class="slide">
+  <p class="eyebrow">4</p>
+  <h2 class="deck-h2">전시 교육에 적용할 수 있는 다섯 가지</h2>
+  <p>모두 프로그램의 구성을 바꾸지 않고 진행 방식만으로 적용할 수 있는 것들이다.</p>
+</div>
+
+<!-- 37 · 다섯 가지 -->
+<div class="slide">
+  <h2 class="deck-h2">다섯 가지 실천 항목</h2>
+  <ol>
+    <li class="fragment"><strong>시작 전에 묻는다.</strong> 사전 안내 단계에 문항 한 줄을 넣고, 답이 오지 않으면 도입부에 전체를 향해 묻는다</li>
+    <li class="fragment"><strong>설명자의 외모와 사물의 위치를 말로 제시한다.</strong> 시선을 전제한 지시어 대신 위치를 언어로 지정한다</li>
+    <li class="fragment"><strong>이차원 정보를 삼차원 자세로 옮긴다.</strong> 준비물이 들지 않아 가장 즉시 적용할 수 있다</li>
+    <li class="fragment"><strong>하나의 활동에 감각 경로를 하나 더 추가한다.</strong> 활동을 교체하지 않고 순서를 하나 추가한다</li>
+    <li class="fragment"><strong>만져도 되는 것을 미리 골라 표시한다.</strong> 새로 제작할 필요 없이 이미 갖춘 표본과 교구 가운데 고른다</li>
+  </ol>
+  <p class="point">특정 학습자를 위해 준비한 조정은 그 회차에서만 쓰이고 사라지지 않는다.</p>
+</div>
+
+<!-- 38 · 나가며 -->
+<div class="slide">
+  <p class="eyebrow">나가며</p>
+  <h2 class="deck-h2">두 가지 기술이 따로 있지 않다</h2>
+  <ul>
+    <li class="fragment"><strong>영상 자막</strong>은 청각장애인을 위해 만들어졌으나 지금은 소리를 켜지 못하는 모든 사람이 쓴다</li>
+    <li class="fragment"><strong>음성 안내</strong>는 시각장애인을 위해 만들어졌으나 지금은 운전 중인 모든 사람이 쓴다</li>
+    <li class="fragment"><strong>문턱을 없앤 경사로</strong>는 휠체어 이용자를 위해 만들어졌으나 지금은 유아차와 짐수레가 함께 지난다</li>
+  </ul>
+  <p class="point">한 사람의 필요에서 출발한 조치가 결국 모두가 쓰는 인프라가 된 것이다.</p>
+</div>
+
+<!-- 39 · 그냥 좋은 해설 -->
+<div class="slide">
+  <h2 class="deck-h2">그냥 좋은 해설이었다</h2>
+  <ul>
+    <li>반 고흐 미술관에서 내가 받은 해설은 시각장애인용 해설이 아니라 <em>그냥 좋은 해설</em>이었고, 그래서 지나가던 사람들이 걸음을 멈췄다</li>
+    <li class="fragment">내가 만든 학습자료도 시각장애 교사용 자료가 아니라 <em>그냥 잘 작동하는 자료</em>였고, 그래서 155명이 그것을 더 하자고 했다</li>
+  </ul>
+  <p class="point">보지 못했기 때문에 오히려 더 알고 싶고, 그래서 친절한 설명이 덧붙여졌을 때 얻는 것도 그만큼 크다.</p>
+</div>
+
+<!-- 40 · 마지막 문장 -->
+<div class="slide">
+  <h2 class="sr-only">마지막으로 남기고 싶은 한 문장</h2>
+  <p class="huge-q">전시장에서 가장 조용히 서 있는 사람이<br>그날 설명을 가장 기다리는 관람객일 수 있다</p>
+</div>
+
+<!-- 41 · 공개해 둔 것 -->
+<div class="slide">
+  <h2 class="deck-h2">공개해 둔 것</h2>
+  <ul>
+    <li><a href="https://engccer.github.io/word-bomb-L1/" target="_blank" rel="noopener">Word Bomb, engccer.github.io/word-bomb-L1</a></li>
+    <li><a href="https://aro-deeply.github.io/pickme/" target="_blank" rel="noopener">Pick Me, aro-deeply.github.io/pickme</a></li>
+    <li><a href="https://khudt.posthaven.com/" target="_blank" rel="noopener">김헌용의 블로그, khudt.posthaven.com</a></li>
+  </ul>
+  <p>고맙습니다.</p>
+</div>
+
+</main>
+
+<div class="decknav">
+  <button type="button" id="prevBtn">이전</button>
+  <span class="counter" id="counter" aria-hidden="true"></span>
+  <button type="button" id="nextBtn">다음</button>
+</div>
+
+<p id="status" class="sr-only" aria-live="polite"></p>
+
+<script>
+'use strict';
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var TOTAL = slides.length;
+  var cur = -1;
+  var fragIndex = 0;
+  var sfxOn = true, narrOn = true, docMode = false;
+
+  var modeBtn = document.getElementById('modeBtn');
+  var narrBtn = document.getElementById('narrBtn');
+  var sfxBtn  = document.getElementById('sfxBtn');
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  var counter = document.getElementById('counter');
+  var progress = document.getElementById('progress');
+  var status  = document.getElementById('status');
+  var stage   = document.getElementById('deck');
+
+  /* 스크린 리더가 슬라이드 제목을 먼저 읽도록 비켜 주는 간격.
+     0으로 만들면 제목 낭독과 내레이션이 정면으로 겹친다. */
+  var NARR_DELAY = 1100;
+
+  function pad2(n){ return (n < 10 ? '0' : '') + n; }
+  function announce(msg){
+    status.textContent = '';
+    setTimeout(function(){ status.textContent = msg; }, 60);
+  }
+
+  /* ── 오디오 ───────────────────────────────────────────────
+     세 갈래를 청각적으로 구분한다. 시각장애 발표자가 진행 상태를 귀로 알기 위한
+     장치다. 항목이 하나 더 나온 것(tick)과 다음 장으로 넘어간 것(page-turn)을
+     소리로 가른다. 볼륨을 여기서 낮추지 않는다. */
+  var ctx = null;
+  var turn = null;
+  try{
+    turn = new Audio('sfx/page-turn.mp3');
+    turn.preload = 'auto';
+    turn.volume = 1;
+    turn.load();
+  }catch(e){ turn = null; }
+
+  function getCtx(){
+    if (ctx) return ctx;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    try{ ctx = new AC(); }catch(e){ ctx = null; }
+    return ctx;
+  }
+
+  function beep(freqFrom, freqTo, peak, dur){
+    var c = getCtx();
+    if (!c) return;
+    var fire = function(){
+      try{
+        var osc = c.createOscillator(), g = c.createGain();
+        var t = c.currentTime;
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freqFrom, t);
+        if (freqTo !== freqFrom) osc.frequency.exponentialRampToValueAtTime(freqTo, t + dur * 0.85);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(peak, t + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        osc.connect(g); g.connect(c.destination);
+        osc.start(t); osc.stop(t + dur + 0.02);
+      }catch(e){}
+    };
+    if (c.state === 'suspended') c.resume().then(fire, function(){});
+    else fire();
+  }
+
+  function playTick(){ if (sfxOn) beep(880, 880, 0.10, 0.12); }        // 항목 등장
+  function playTurnTone(){ if (sfxOn) beep(440, 240, 0.13, 0.30); }    // 장 전환 폴백
+
+  function playSfx(){
+    if (!sfxOn) return;
+    if (turn && turn.readyState >= 2){
+      try{
+        turn.currentTime = 0;
+        var p = turn.play();
+        if (p && p.catch) p.catch(playTurnTone);
+        return;
+      }catch(e){}
+    }
+    playTurnTone();
+  }
+
+  var narrTimer = null, narrAudio = null;
+  try{
+    narrAudio = new Audio('narration/slide-01.mp3');
+    narrAudio.preload = 'auto';
+    narrAudio.volume = 1;
+  }catch(e){ narrAudio = null; }
+
+  function stopNarration(){
+    if (narrTimer){ clearTimeout(narrTimer); narrTimer = null; }
+    if (narrAudio){ try{ narrAudio.pause(); }catch(e){} }
+  }
+
+  function playNarration(index){
+    stopNarration();
+    if (!narrOn || docMode || !narrAudio) return;
+    narrTimer = setTimeout(function(){
+      narrTimer = null;
+      if (cur !== index) return;
+      try{
+        narrAudio.src = 'narration/slide-' + pad2(index + 1) + '.mp3';
+        narrAudio.currentTime = 0;
+        var p = narrAudio.play();
+        if (p && p.catch) p.catch(function(){});
+      }catch(e){}
+    }, NARR_DELAY);
+  }
+
+  /* 슬라이드에 심은 영상이 재생되는 동안 내레이션이 겹치지 않게 한다. */
+  Array.prototype.forEach.call(document.querySelectorAll('video'), function(v){
+    v.addEventListener('play', stopNarration);
+  });
+
+  function unlockAudio(){
+    var c = getCtx();
+    if (c && c.state === 'suspended') c.resume();
+    if (narrAudio){
+      try{
+        var wasMuted = narrAudio.muted;
+        narrAudio.muted = true;
+        var p = narrAudio.play();
+        var done = function(){
+          try{ narrAudio.pause(); narrAudio.currentTime = 0; }catch(e){}
+          narrAudio.muted = wasMuted;
+        };
+        if (p && p.then) p.then(done, done); else done();
+      }catch(e){}
+    }
+    document.removeEventListener('keydown', unlockAudio, true);
+    document.removeEventListener('pointerdown', unlockAudio, true);
+  }
+  document.addEventListener('keydown', unlockAudio, true);
+  document.addEventListener('pointerdown', unlockAudio, true);
+
+  /* ── 단계별 등장 ──────────────────────────────────────────── */
+  function fragsOf(s){ return s.querySelectorAll('.fragment'); }
+
+  function setFragsVisible(s, count){
+    var f = fragsOf(s);
+    for (var i = 0; i < f.length; i++){
+      if (i < count) f[i].classList.add('frag-visible');
+      else f[i].classList.remove('frag-visible');
+    }
+  }
+
+  /* 등장한 항목으로 포커스를 옮겨 스크린 리더가 그것을 읽게 한다. 다만 링크·버튼에는
+     tabindex를 주지 않는다. 주면 자연 탭 순서에서 빠진다. */
+  function onRevealed(el){
+    if (!el) return;
+    var tag = el.tagName;
+    var focusable = (tag === 'A' && el.hasAttribute('href')) || tag === 'BUTTON' ||
+                    el.getAttribute('tabindex') !== null;
+    if (!focusable) el.setAttribute('tabindex', '-1');
+    try{ el.focus({preventScroll:true}); }catch(e){}
+  }
+
+  /* ── 이동 ─────────────────────────────────────────────────── */
+  function updateNav(){
+    if (docMode) return;
+    var n = fragsOf(slides[cur]).length;
+    prevBtn.disabled = (cur === 0 && fragIndex === 0);
+    nextBtn.disabled = (cur === TOTAL - 1 && fragIndex >= n);
+  }
+
+  function go(n, opts){
+    if (n < 0 || n >= TOTAL || n === cur) return;
+    opts = opts || {};
+    if (cur >= 0){
+      slides[cur].classList.remove('active');
+      /* 앞 장의 영상이 소리를 끌고 다음 장으로 넘어가지 않게 한다. */
+      Array.prototype.forEach.call(slides[cur].querySelectorAll('video'), function(v){
+        try{ v.pause(); }catch(e){}
+      });
+    }
+
+    cur = n;
+    var s = slides[cur];
+    s.classList.add('active');
+
+    var count = fragsOf(s).length;
+    if (opts.revealAll){ setFragsVisible(s, count); fragIndex = count; }
+    else { setFragsVisible(s, 0); fragIndex = 0; }
+
+    counter.textContent = (cur + 1) + ' / ' + TOTAL;
+    progress.style.width = ((cur + 1) / TOTAL * 100) + '%';
+    s.scrollTop = 0;
+
+    playSfx();
+
+    /* 제목이 없는 시각 슬라이드도 포커스가 갈 곳이 있어야 한다. */
+    var target = s.querySelector('h1, h2, h3, .huge-q, .big-quote') || s;
+    target.setAttribute('tabindex', '-1');
+    try{ target.focus({preventScroll:true}); }catch(e){}
+
+    playNarration(cur);
+    updateNav();
+  }
+
+  function advance(){
+    if (docMode) return;
+    var s = slides[cur];
+    var f = fragsOf(s);
+    if (fragIndex < f.length){
+      f[fragIndex].classList.add('frag-visible');
+      fragIndex++;
+      playTick();
+      onRevealed(f[fragIndex - 1]);
+      updateNav();
+    } else {
+      go(cur + 1);
+    }
+  }
+
+  function retreat(){
+    if (docMode) return;
+    if (fragIndex > 0){
+      fragIndex--;
+      fragsOf(slides[cur])[fragIndex].classList.remove('frag-visible');
+      updateNav();
+    } else {
+      go(cur - 1, {revealAll:true});
+    }
+  }
+
+  prevBtn.addEventListener('click', retreat);
+  nextBtn.addEventListener('click', advance);
+
+  document.addEventListener('keydown', function(e){
+    if (docMode) return;
+    if (e.ctrlKey || e.altKey || e.metaKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+    if (t && t.tagName === 'VIDEO') return;
+    if (t && (t.tagName === 'BUTTON' || t.tagName === 'A') &&
+        (e.key === 'Enter' || e.key === ' ')) return;
+    switch(e.key){
+      case 'ArrowRight': case 'PageDown': e.preventDefault(); advance(); break;
+      case 'ArrowLeft': case 'PageUp': case 'Backspace': e.preventDefault(); retreat(); break;
+      case 'Home': e.preventDefault(); go(0); break;
+      case 'End': e.preventDefault(); go(TOTAL - 1, {revealAll:true}); break;
+    }
+  });
+
+  /* 좌우 스와이프. 세로 스크롤은 살려 두고, 링크·버튼·영상 위에서는 넘기지 않는다. */
+  var sx = 0, sy = 0, st = 0;
+  stage.addEventListener('touchstart', function(e){
+    if (e.touches.length !== 1) return;
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY; st = Date.now();
+  }, {passive:true});
+  stage.addEventListener('touchend', function(e){
+    if (docMode || e.changedTouches.length !== 1) return;
+    var dx = e.changedTouches[0].clientX - sx;
+    var dy = e.changedTouches[0].clientY - sy;
+    if (Date.now() - st > 800 || Math.abs(dx) < 60 || Math.abs(dy) > 80) return;
+    var tag = (e.target && e.target.tagName) || '';
+    if (tag === 'A' || tag === 'BUTTON' || tag === 'VIDEO') return;
+    if (dx < 0) advance(); else retreat();
+  }, {passive:true});
+
+  /* ── 문서 모드 ────────────────────────────────────────────── */
+  function setMode(on, opts){
+    docMode = on;
+    document.body.classList.toggle('doc', on);
+    modeBtn.textContent = on ? '발표 모드로 보기' : '문서 모드로 보기';
+    try{ localStorage.setItem('deckDocMode', on ? '1' : '0'); }catch(e){}
+    if (on){
+      stopNarration();
+      for (var i = 0; i < TOTAL; i++) setFragsVisible(slides[i], fragsOf(slides[i]).length);
+    } else {
+      var keep = cur;
+      cur = -1;
+      go(keep < 0 ? 0 : keep, {revealAll:true});
+    }
+    if (opts && opts.announce){
+      announce(on ? '문서 모드입니다. 전체가 한 페이지로 펼쳐졌습니다.'
+                  : '발표 모드입니다. 이전과 다음 버튼으로 넘깁니다.');
+    }
+  }
+  modeBtn.addEventListener('click', function(){ setMode(!docMode, {announce:true}); });
+
+  narrBtn.addEventListener('click', function(){
+    narrOn = !narrOn;
+    this.textContent = narrOn ? '내레이션 켬' : '내레이션 끔';
+    this.setAttribute('aria-pressed', String(narrOn));
+    try{ localStorage.setItem('deckNarr', narrOn ? '1' : '0'); }catch(e){}
+    if (!narrOn) stopNarration();
+    else if (cur >= 0) playNarration(cur);
+  });
+
+  sfxBtn.addEventListener('click', function(){
+    sfxOn = !sfxOn;
+    this.textContent = sfxOn ? '효과음 켬' : '효과음 끔';
+    this.setAttribute('aria-pressed', String(sfxOn));
+    try{ localStorage.setItem('deckSfx', sfxOn ? '1' : '0'); }catch(e){}
+    if (sfxOn) playSfx();
+  });
+
+  /* ── 시작 ─────────────────────────────────────────────────── */
+  try{
+    if (localStorage.getItem('deckSfx') === '0'){
+      sfxOn = false; sfxBtn.textContent = '효과음 끔';
+      sfxBtn.setAttribute('aria-pressed', 'false');
+    }
+    if (localStorage.getItem('deckNarr') === '0'){
+      narrOn = false; narrBtn.textContent = '내레이션 끔';
+      narrBtn.setAttribute('aria-pressed', 'false');
+    }
+  }catch(e){}
+
+  go(0);
+  try{
+    if (localStorage.getItem('deckDocMode') === '1') setMode(true);
+  }catch(e){}
+})();
+</script>
+
+</body>
+</html>
