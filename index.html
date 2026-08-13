@@ -13,8 +13,13 @@
     - .fragment의 visibility:hidden을 opacity:0으로 바꾸지 않는다
 
   덱 고유 추가분: 사진·영상 슬라이드(.shot/.shots/.filmstrip), 설문 차트(.chart-card,
-  .dual-chart). 차트 마크업과 수치 구조는 260523 기조강연 덱에서 가져왔고 표본을
-  155명 기준으로 갱신했다. 스타일은 이 템플릿 팔레트에 맞춰 새로 썼다.
+  .dual-chart), 제언의 행동 문장(.act). 차트 마크업과 수치 구조는 260523 기조강연
+  덱에서 가져왔고 표본을 155명 기준으로 갱신했다.
+
+  본문 원칙(2026-08-14 개정): 슬라이드는 원고의 요약이 아니다. 세부 설명과 개인적
+  소회는 발표자가 구두로 풀고, 화면에는 제목과 키워드와 핵심 메시지만 둔다. 목록은
+  문장으로 쓰지 않고 명사형이나 음슴체로 끊는다. 1장은 사진과 영상이 무엇인지만
+  전하고 설명을 얹지 않는다.
 -->
 <style>
 :root{
@@ -162,6 +167,13 @@ strong{font-weight:700;background:linear-gradient(transparent 58%, var(--green-s
   padding:6vh 0;
 }
 
+/* 제언 슬라이드의 행동 문장. 원고의 서술을 그대로 옮기지 않고 청중이 교육실에서
+   그대로 할 수 있는 동작으로 다시 썼다. */
+.act{
+  border-left:10px solid var(--green);
+  padding-left:1rem;
+}
+
 .cards{display:flex;gap:1rem;flex-wrap:wrap;margin:1.2rem 0;}
 .card{
   flex:1 1 260px;
@@ -214,8 +226,10 @@ a{color:#2f6ae0;}
    사진 전면 슬라이드는 제목과 캡션만 곁들인다. 목록을 함께 얹으면 화면이 넘쳐
    발표 중 스크롤이 필요해진다. 설명은 다음 슬라이드에 둔다. */
 .shot{margin:.6rem 0 0;text-align:center;}
+/* 50vh: 눈짐작이 아니라 실측값이다. 56vh면 눈썹줄과 캡션과 출처줄이 함께 붙는
+   23장에서 화면을 40px 넘긴다. */
 .shot img{
-  max-width:100%;max-height:56vh;
+  max-width:100%;max-height:50vh;
   border-radius:14px;box-shadow:var(--shadow-card);
 }
 .shot figcaption,.shots figcaption{
@@ -317,6 +331,27 @@ a{color:#2f6ae0;}
 .hbar.h2 .hb-pct,.hbar.h3 .hb-pct{color:var(--green);}
 .hbar.h4 .hb-pct,.hbar.h5 .hb-pct{color:var(--blue);}
 
+/* ── 특이도 보정 ──────────────────────────────────────────────
+   위쪽 `.slide p,.slide li`가 특이도 (0,1,1)이라 한 클래스로 쓴 `<p>` 규칙을 전부
+   이긴다. 그 탓에 마지막 문장(.huge-q)이 본문 크기로 나오고, 차트 안 문구가
+   본문 크기로 커지면서 막대 하나가 109px까지 부풀어 34장이 화면을 넘쳤다.
+   같은 값을 `.slide` 접두사로 다시 선언해 의도한 크기를 되돌린다. */
+.slide .byline{font-size:clamp(16px,2.2vmin,24px);}
+.slide .eyebrow{font-size:clamp(14px,1.8vmin,19px);}
+.slide .big-quote{font-size:clamp(24px,4vmin,46px);}
+.slide .huge-q{font-size:clamp(28px,5.2vmin,64px);}
+.slide .credit{font-size:clamp(13px,1.7vmin,18px);}
+.slide .card-num{font-size:clamp(13px,1.7vmin,17px);}
+.chart-card p,.chart-pane p{margin:0;}
+.slide .row-label{font-size:clamp(16px,2.2vmin,24px);}
+.slide .row-score{font-size:clamp(24px,3.4vmin,40px);}
+.slide .row-pos{font-size:clamp(13px,1.6vmin,17px);}
+.slide .pane-title{font-size:clamp(15px,1.9vmin,20px);}
+.slide .legend-row{font-size:clamp(15px,1.9vmin,20px);}
+.slide .zero-card{font-size:clamp(15px,1.9vmin,20px);}
+.slide .hb-label{font-size:clamp(15px,1.9vmin,20px);}
+.slide .hb-pct{font-size:clamp(16px,2vmin,21px);}
+
 .chart-card:not(.frag-visible) .row-fill{width:0;}
 .chart-pane:not(.frag-visible) .hb-fill{width:0;}
 #donut-a,#donut-b,#donut-c{transition:stroke-dasharray .9s var(--ease-soft);}
@@ -404,8 +439,8 @@ body.doc .shots img{height:auto;}
 <!-- 1 · 표지 -->
 <div class="slide">
   <h1 class="deck-h1">내가 만난 배리어프리 교육과 전시</h1>
-  <p class="byline">김헌용 · 신명중학교 영어 교사, 함께하는장애인교원노동조합 위원장</p>
-  <p class="byline">2026년 8월 14일(금) · 국립생물자원관 교육강사 워크숍</p>
+  <p class="byline">김헌용, 신명중학교 영어 교사, 함께하는장애인교원노동조합 위원장</p>
+  <p class="byline">2026년 8월 14일(금), 국립생물자원관 교육강사 워크숍</p>
   <p class="byline">나인트리 프리미어 로카우스 호텔 서울 용산 9층 안중근실</p>
 </div>
 
@@ -413,12 +448,12 @@ body.doc .shots img{height:auto;}
 <div class="slide">
   <p class="eyebrow">들어가며</p>
   <h2 class="deck-h2">오늘 나눌 이야기</h2>
-  <ul>
-    <li class="fragment">전시기관에서 받은 설명이 어떻게 달랐는지</li>
-    <li class="fragment">촉각으로 경험한 전시물</li>
-    <li class="fragment">같은 원칙으로 만든 학습자료와 학생들의 평가</li>
-    <li class="fragment">전시 교육 현장에 옮길 수 있는 항목</li>
-  </ul>
+  <div class="chips">
+    <span class="chip">전시기관에서 받은 설명</span>
+    <span class="chip">촉각으로 경험한 전시물</span>
+    <span class="chip">내 교실의 학습자료와 학생들의 평가</span>
+    <span class="chip">생물다양성교실에 옮길 다섯 가지</span>
+  </div>
 </div>
 
 <!-- 3 · 자기소개 영상 -->
@@ -426,7 +461,7 @@ body.doc .shots img{height:auto;}
   <h2 class="deck-h2">내가 만난 세상</h2>
   <figure class="filmstrip">
     <video src="video/jerrybag.mp4" controls preload="metadata" width="960"></video>
-    <figcaption>제리백 「Way to go」 · 2분 34초 · 한국어 자막 포함</figcaption>
+    <figcaption>제리백 「Way to go」, 2분 34초, 한국어 자막 포함</figcaption>
   </figure>
 </div>
 
@@ -438,12 +473,12 @@ body.doc .shots img{height:auto;}
     <div class="card accent-blue fragment">
       <p class="card-num">설명을 받는 위치</p>
       <h3>여행과 전시 관람</h3>
-      <p>세계를 이해하는 방식을 바꾸어 온 학습의 과정. 어떤 곳에서는 아무것도 얻지 못한 채 나왔고, 어떤 곳에서는 예정된 시간을 크게 넘겨서까지 몰입했다.</p>
+      <p>세계를 이해하는 방식을 바꾸어 온 학습</p>
     </div>
     <div class="card accent-green fragment">
       <p class="card-num">설명하는 자리</p>
       <h3>교실</h3>
-      <p>정해진 내용을 정해진 시간 안에 전달해야 하고, 그 앞에는 조건이 서로 다른 서른 명의 학생이 앉아 있다.</p>
+      <p>조건이 서로 다른 서른 명 앞</p>
     </div>
   </div>
   <p class="point">그 차이를 만든 것은 관람자의 감각이 아니라 그곳이 준비한 인프라와 서비스였다.</p>
@@ -464,18 +499,18 @@ body.doc .shots img{height:auto;}
 <div class="slide">
   <p class="eyebrow">교직원 연수</p>
   <h2 class="deck-h2">뮤지엄 산</h2>
-  <ul>
-    <li>동료 교사들은 도슨트를 따라 정원에서 건물로, 건물에서 작품으로 시선을 옮기며 작품 세계와 만나고 있었다</li>
-    <li class="fragment">나는 그 거대한 작품 속에서 낙오되었고, 걸으면서 입술을 수도 없이 깨물었다</li>
-    <li class="fragment">그날의 해설은 나쁘지 않았다. 오히려 <strong>좋은 해설</strong>이었고, 그래서 더 관람에 적극적으로 참여하고 싶었다</li>
-    <li class="fragment"><em>흰지팡이를 들고 있는 것을 뻔히 보면서도</em> 가이드는 내게 다가오지 않았다</li>
-  </ul>
-  <p class="point">나는 그저 남들과 똑같이 행렬을 따라다니며 눈으로 감상하는 또 한 명의 관람객으로 치부됐다.</p>
+  <div class="chips">
+    <span class="chip">좋은 해설</span>
+    <span class="chip">흰지팡이를 뻔히 보면서도</span>
+    <span class="chip">다가오지 않은 가이드</span>
+    <span class="chip">행렬 속의 낙오</span>
+  </div>
+  <p class="point">남들과 똑같이 행렬을 따라다니며 눈으로 감상하는 또 한 명의 관람객으로 치부됐다.</p>
 </div>
 
 <!-- 7 · 필링 반 고흐 -->
 <div class="slide">
-  <p class="eyebrow">2023년 겨울 · 암스테르담</p>
+  <p class="eyebrow">2023년 겨울, 암스테르담</p>
   <h2 class="deck-h2">필링 반 고흐</h2>
   <figure class="shot">
     <img src="img/feeling-vangogh.jpg" alt="Feeling Van Gogh 프로그램 표기 앞에서 웃고 있는 김헌용">
@@ -495,17 +530,17 @@ body.doc .shots img{height:auto;}
 <!-- 9 · 나탈리가 한 일 -->
 <div class="slide">
   <h2 class="deck-h2">나탈리가 한 일</h2>
-  <ul>
-    <li class="fragment">시작하기 전에 내 <em>시력 상태</em>를 물었다</li>
-    <li class="fragment">자기 외모를 먼저 설명했다</li>
-    <li class="fragment">간이의자를 준비해 그림 앞에 나를 앉혔다</li>
-    <li class="fragment">자리를 옮길 때마다 주머니에서 양각 자료를 꺼냈다</li>
-    <li class="fragment">팔레트 모형을 <strong>그림과 같은 방향으로</strong> 내 손에 쥐여 주었다</li>
-    <li class="fragment">붓질의 방향을 설명할 때는 <em>내 등에 손가락으로 선을 그었다</em></li>
-  </ul>
+  <div class="chips">
+    <span class="chip">시력 상태 묻기</span>
+    <span class="chip">자기 외모 설명</span>
+    <span class="chip">그림 앞에 앉히기</span>
+    <span class="chip">주머니 속 양각 자료</span>
+    <span class="chip">그림과 같은 방향으로 쥐여 주기</span>
+    <span class="chip">등에 붓질 그리기</span>
+  </div>
 </div>
 
-<!-- 10 · 감자 먹는 사람들 영상 -->
+<!-- 10 · 나탈리 해설 영상 -->
 <div class="slide">
   <h2 class="deck-h2">능숙하게 설명하는 가이드</h2>
   <figure class="filmstrip">
@@ -523,7 +558,7 @@ body.doc .shots img{height:auto;}
   </figure>
 </div>
 
-<!-- 12 · 관람객이 물러난 자리 -->
+<!-- 12 · 그림 앞에 앉히다 -->
 <div class="slide">
   <h2 class="deck-h2">그림 앞에 나를 앉혔다</h2>
   <figure class="shot">
@@ -535,18 +570,17 @@ body.doc .shots img{height:auto;}
 <!-- 13 · 사람들이 모여들었다 -->
 <div class="slide">
   <h2 class="deck-h2">사람들이 모여들었다</h2>
-  <ul>
-    <li>해설이 정보 전달이 아니라 <strong>대화 형태</strong>로 이어졌다</li>
-    <li class="fragment">그림 앞에서 내가 느낀 것을 말하면 나탈리는 그 감상을 받아 이야기를 이어 갔다</li>
-    <li class="fragment">지나가던 다른 관람객들이 하나둘 모여들어 함께 들었다</li>
-    <li class="fragment">예정 시간을 크게 넘긴 <em>한 시간 사십 분</em>이 지나서야 투어가 끝났다</li>
-  </ul>
-  <p class="point">시각장애인 한 사람을 위해 준비한 해설이 다른 사람들에게도 무척이나 감명 깊었던 모양이었다.</p>
+  <p class="big-quote">예정 시간을 크게 넘긴<br>1시간 40분</p>
+  <div class="chips">
+    <span class="chip">정보 전달이 아니라 대화</span>
+    <span class="chip">지나가던 관람객들이 모여듦</span>
+  </div>
+  <p class="point">시각장애인 한 사람을 위해 준비한 해설이 다른 사람들에게도 감명 깊었던 모양이었다.</p>
 </div>
 
 <!-- 14 · 어느 수집가의 초대 -->
 <div class="slide">
-  <p class="eyebrow">2022년 여름 · 국립중앙박물관</p>
+  <p class="eyebrow">2022년 여름, 국립중앙박물관</p>
   <h2 class="deck-h2">어느 수집가의 초대</h2>
   <div class="shots">
     <figure>
@@ -567,12 +601,12 @@ body.doc .shots img{height:auto;}
 <!-- 15 · 전시의 설계도 -->
 <div class="slide">
   <h2 class="deck-h2">전시의 설계도를 말로 건네받다</h2>
-  <ul>
-    <li class="fragment">일반 개관보다 한 시간 이른 시각에 <strong>시각장애인 관람 시간</strong>이 따로 열렸다</li>
-    <li class="fragment">시각장애인을 위해 별도로 제작한 오디오가이드가 준비되어 있었다</li>
-    <li class="fragment">전시를 총괄 기획한 학예연구관이 직접 해설을 맡았다</li>
-    <li class="fragment">작품을 <em>왜 그 자리에 걸었는지</em>, 조명을 어떻게 썼는지까지 이야기해 주었다</li>
-  </ul>
+  <div class="chips">
+    <span class="chip">한 시간 이른 시각장애인 관람 시간</span>
+    <span class="chip">시각장애인용 오디오가이드</span>
+    <span class="chip">총괄 기획자가 직접 해설</span>
+    <span class="chip">왜 그 자리에 걸었는지까지</span>
+  </div>
   <p class="point">눈으로 볼 수 없는 전시의 설계도를 말로 건네받은 셈이다.</p>
 </div>
 
@@ -582,18 +616,18 @@ body.doc .shots img{height:auto;}
   <div class="cards">
     <div class="card accent-coral fragment">
       <p class="card-num">뮤지엄 산</p>
-      <h3>준비가 부족했다</h3>
-      <p>나와 같은 다양한 관람객을 맞을 준비가 부족했다.</p>
+      <h3>준비 없음</h3>
+      <p>다양한 관람객을 맞을 준비 부족</p>
     </div>
     <div class="card accent-blue fragment">
       <p class="card-num">반 고흐 미술관</p>
       <h3>교구와 가이드</h3>
-      <p>특별 제작된 교구와 능숙한 가이드가 있었다.</p>
+      <p>특별 제작된 교구와 능숙한 해설</p>
     </div>
     <div class="card accent-green fragment">
       <p class="card-num">국립중앙박물관</p>
       <h3>설계한 프로그램</h3>
-      <p>장애인 관람객을 위해 설계한 프로그램이 있었다.</p>
+      <p>장애인 관람객을 위한 설계</p>
     </div>
   </div>
   <p class="point">소장한 작품 자체보다는 전달하는 방식과 관람객을 맞이하는 태도의 차이였다.</p>
@@ -609,11 +643,11 @@ body.doc .shots img{height:auto;}
 <!-- 18 · 촉감은 존재를 증언한다 -->
 <div class="slide">
   <h2 class="deck-h2">촉감은 존재를 증언한다</h2>
-  <ul>
-    <li>점자를 읽을 때도, 처음 만난 사람과 악수할 때도, 낯선 길을 더듬을 때도 <em>손끝이 곧 나의 시선</em>이다</li>
-    <li class="fragment">촉각으로 경험한 세상은 실제적이며 직접적이다</li>
-    <li class="fragment">비록 촉감이 언제나 섬세한 것은 아니지만, 생생한 상상을 불러일으키기에는 충분하다</li>
-  </ul>
+  <div class="chips">
+    <span class="chip">손끝이 곧 시선</span>
+    <span class="chip">실제적이고 직접적인 경험</span>
+    <span class="chip">완벽한 재현은 아님</span>
+  </div>
   <p class="point">촉각 자료는 대상을 완벽하게 재현하지는 못하더라도 새로운 앎으로 이어지는 단단한 토대를 놓아 준다.</p>
 </div>
 
@@ -656,16 +690,16 @@ body.doc .shots img{height:auto;}
 <!-- 22 · 촉지도가 드문 곳 -->
 <div class="slide">
   <h2 class="deck-h2">교육 시설일수록 아쉽다</h2>
-  <ul>
-    <li>우리나라에도 공공기관마다 입구에 <strong>촉지도</strong>가 설치된 경우가 많다</li>
-    <li class="fragment">하지만 미술관이나 전시관 같은 공간에는 드물다</li>
-    <li class="fragment">시설 자체가 교육 목적으로 세워진 곳일수록 촉지도의 <em>교육적 효과</em>가 클 텐데 아쉬운 일이다</li>
-  </ul>
+  <div class="chips">
+    <span class="chip">공공기관 입구에는 촉지도</span>
+    <span class="chip">미술관과 전시관에는 드묾</span>
+  </div>
+  <p class="point">시설 자체가 교육 목적으로 세워진 곳일수록 촉지도의 교육적 효과가 클 텐데 아쉬운 일이다.</p>
 </div>
 
 <!-- 23 · 경기장의 소장품 -->
 <div class="slide">
-  <p class="eyebrow">올해 초 · 레알 마드리드 홈 구장</p>
+  <p class="eyebrow">올해 초, 레알 마드리드 홈 구장</p>
   <h2 class="deck-h2">경기장의 소장품</h2>
   <figure class="shot">
     <img src="img/stadium-boot.jpg" alt="경기장 소품실에서 흰지팡이를 옆에 세워 둔 채, 천을 덮은 탁자 위의 낡은 축구화를 두 손으로 만지는 장면. 스터드에 마른 잔디가 끼어 있고 뒤편에 유니폼과 트로피가 흐리게 보인다">
@@ -677,18 +711,17 @@ body.doc .shots img{height:auto;}
 <!-- 24 · 절차 -->
 <div class="slide">
   <h2 class="deck-h2">주목할 것은 절차였다</h2>
-  <ul>
-    <li>축구화에는 선수를 상징하는 글자가 양각으로 새겨져 있었고 <em>잔디의 푸른 물이 아직 빠지지 않은 채</em>였다</li>
-    <li class="fragment">사진과 중계로만 존재하던 것들이 손안에서 크기와 무게와 질감을 얻었다</li>
-    <li class="fragment"><strong>사전 예약도 별도 요청도 없었다.</strong> 입구에서 흰지팡이를 본 직원이 무전을 쳤고, 동선을 파악해 투어 막바지에 자연스럽게 안내했다</li>
-    <li class="fragment">한국에서는 대부분 복잡한 사전 신청을 요구하거나, 막상 가면 담당자가 없다는 답이 돌아온다</li>
-  </ul>
-  <p class="point">준비된 자료가 있어도 그것을 꺼내 주는 절차가 무거우면 관람객에게는 없는 것과 같다.</p>
+  <div class="chips">
+    <span class="chip">사전 예약도 별도 요청도 없음</span>
+    <span class="chip">흰지팡이를 본 직원의 무전</span>
+    <span class="chip">투어 막바지에 자연스럽게 안내</span>
+  </div>
+  <p class="point">준비된 자료가 있어도 그것을 꺼내 주는 절차가 무거우면 없는 것과 같다.</p>
 </div>
 
 <!-- 25 · 소리를 촉감으로 -->
 <div class="slide">
-  <p class="eyebrow">2025년 3월 · 국립중앙박물관 「공간_사이」</p>
+  <p class="eyebrow">2025년 3월, 국립중앙박물관 「공간_사이」</p>
   <h2 class="deck-h2">소리를 촉감으로 느끼다</h2>
   <div class="shots">
     <figure>
@@ -706,25 +739,25 @@ body.doc .shots img{height:auto;}
 <!-- 26 · 몸으로 알게 되었다 -->
 <div class="slide">
   <h2 class="deck-h2">몸으로 알게 되었다</h2>
-  <ul>
-    <li>청음 의자에 앉으면 <em>종소리의 진동이 몸으로 전해진다</em></li>
-    <li class="fragment">저주파를 재현하는 소리가 울리고, 4미터 높이의 미디어아트가 그 소리를 눈으로 보여 준다</li>
-    <li class="fragment">시각장애인 관람객에게는 음성 해설이, 청각장애인 관람객에게는 아바타 수어가 준비되어 있다</li>
-    <li class="fragment">성덕대왕 신종의 축소 모형과 종을 만드는 재료도 만져 볼 수 있다</li>
-    <li class="fragment"><strong>이 공간은 예약도 계획도 필요 없다</strong></li>
-  </ul>
+  <div class="chips">
+    <span class="chip">청음 의자의 진동</span>
+    <span class="chip">소리를 눈으로 보여 주는 미디어아트</span>
+    <span class="chip">음성 해설과 아바타 수어</span>
+    <span class="chip">만져 보는 축소 모형과 재료</span>
+    <span class="chip">예약도 계획도 필요 없음</span>
+  </div>
   <p class="point">특별한 사람을 위해 특별한 날에 여는 자리가 아니라 아무 때나 스며들 수 있는 자리로 만든 것이다.</p>
 </div>
 
 <!-- 27 · 점자가 새겨진 카드 -->
 <div class="slide">
   <h2 class="deck-h2">점자가 새겨진 카드</h2>
-  <ul>
-    <li>이탈리아인 지인에게 받은 우노. <strong>모든 장에 점자가 새겨진 카드</strong>였다</li>
-    <li class="fragment">여럿이 모여 하는 게임은 대부분 동작을 쓰는 시각적 게임이라, 낄 수도 없고 자리를 뜰 수도 없는 상태가 이어졌다</li>
-    <li class="fragment">웃음이 터질 때마다 따라 웃었지만 <em>무엇이 우스운지는 끝내 알 수 없었다</em></li>
-    <li class="fragment">통합이나 포용을 이야기할 때 우리는 좀처럼 <strong>함께 놀 권리</strong>를 떠올리지 못한다</li>
-  </ul>
+  <div class="chips">
+    <span class="chip">모든 장에 점자</span>
+    <span class="chip">동작을 쓰는 시각적 게임</span>
+    <span class="chip">낄 수도 자리를 뜰 수도 없음</span>
+    <span class="chip">함께 놀 권리</span>
+  </div>
   <p class="point">촉각은 시각 설명을 보조하는 수단이 아니라 그 자체로 독립된 인식의 경로이다.</p>
 </div>
 
@@ -732,74 +765,74 @@ body.doc .shots img{height:auto;}
 <div class="slide">
   <p class="eyebrow">3</p>
   <h2 class="deck-h2">한 학생을 위한 설계, 모든 학생을 위한 수업</h2>
-  <p>여기까지가 내가 세상을 만나 온 방식이다. 이번에는 반대로 내가 설명하는 위치에서 어떻게 내 수업을 다양한 감각으로 전환하고자 노력하고 있는지 소개한다.</p>
+  <div class="chips">
+    <span class="chip">설계 단계의 접근성</span>
+    <span class="chip">보편적 학습 설계</span>
+    <span class="chip">Word Bomb</span>
+    <span class="chip">Pick Me</span>
+    <span class="chip">155명의 응답</span>
+  </div>
 </div>
 
 <!-- 29 · 설계 단계의 접근성 -->
 <div class="slide">
   <h2 class="deck-h2">설계 단계의 접근성</h2>
-  <ul>
-    <li>내가 수업에 쓰는 자료는 무엇보다 <strong>내가 화면 낭독기로 직접 다룰 수 있어야</strong> 한다</li>
-    <li class="fragment">아무리 잘 만든 버튼이 있어도 그 버튼에 이름이 붙어 있지 않으면 나는 그것을 누를 수 없다</li>
-    <li class="fragment">그래서 완성한 뒤에 접근성을 덧붙이는 방식을 택할 수 없었다</li>
-    <li class="fragment">화면을 읽어 주는 음성과 키보드만으로 가능한 조작은 <em>글을 빨리 읽지 못하는 학생과 마우스가 서툰 학생</em>에게도 그대로 쓰였다</li>
-  </ul>
+  <div class="chips">
+    <span class="chip">화면 낭독기로 직접 다뤄야 함</span>
+    <span class="chip">이름 없는 버튼은 누를 수 없음</span>
+    <span class="chip">완성한 뒤 덧붙이기는 불가능</span>
+  </div>
   <p class="point">누구든 장벽 없이 들어올 수 있는 포용성과, 한 번 들어온 학생을 끝까지 머물게 하는 몰입감.</p>
 </div>
 
 <!-- 30 · UDL과 멀티모달 -->
 <div class="slide">
   <h2 class="deck-h2">보편적 학습 설계와 다중 감각 구현</h2>
-  <ul>
-    <li>처음부터 다양한 학습자의 스펙트럼을 고려해 배움의 환경을 <strong>유연하게 설계</strong>한다</li>
-    <li class="fragment">학습 내용을 여러 방식으로 제시하고, 이해한 바를 여러 방식으로 표현하게 한다</li>
-    <li class="fragment">하나의 학습 목표를 소리와 텍스트, 시각적 이미지, 직접 조작, 즉각적 피드백으로 동시에 구현한다</li>
-  </ul>
-  <div class="mark fragment">
-    <p>국립중앙박물관의 「공간_사이」가 종소리에 한 일과 구조가 같다.</p>
-    <p>소리를 듣기 어려운 사람은 진동과 화면으로, 화면을 보기 어려운 사람은 소리와 진동으로 같은 내용을 얻는다.</p>
+  <div class="chips">
+    <span class="chip">여러 방식의 제시</span>
+    <span class="chip">여러 방식의 표현</span>
+    <span class="chip">여러 갈래의 흥미 유도</span>
   </div>
-  <p class="point">어느 한 경로가 차단된 학습자도 다른 경로로 참여할 수 있다.</p>
+  <div class="mark fragment">
+    <p>국립중앙박물관의 「공간_사이」가 종소리에 한 일과 구조가 같다</p>
+  </div>
+  <p class="point">하나의 학습 목표를 소리와 텍스트, 시각적 이미지, 직접 조작, 즉각적 피드백으로 동시에 구현하면 어느 한 경로가 차단된 학습자도 다른 경로로 참여할 수 있다.</p>
 </div>
 
 <!-- 31 · Word Bomb -->
 <div class="slide">
-  <p class="eyebrow">사례 하나 · 공강 30분</p>
+  <p class="eyebrow">사례 하나, 공강 30분에 만든 단일 HTML 파일</p>
   <h2 class="deck-h2">Word Bomb</h2>
   <div class="chips">
-    <span class="chip">흑백 영영풀이 학습지</span>
+    <span class="chip">흑백 영영풀이 학습지에서 출발</span>
     <span class="chip">큼직한 시각 카드</span>
     <span class="chip">단어를 읽어 주는 음성</span>
     <span class="chip">카운트다운</span>
     <span class="chip">연속 정답 배수</span>
     <span class="chip">무한 재도전</span>
   </div>
-  <ul>
-    <li class="fragment">한 문장을 요청했고, 단일 HTML 파일로 작동하는 웹 게임이 완성되기까지 <em>30분</em>이 걸렸다</li>
-    <li class="fragment">학습지 위에서 평면적이던 활자 하나가 시각과 청각과 반응 시간을 아우르는 활동으로 바뀌었다</li>
-    <li class="fragment">눈빛이 멍해지던 학생부터 가장 빨리 푸는 학생까지 <strong>각자의 속도로 동시에 참여</strong>했다</li>
-    <li class="fragment"><a href="https://engccer.github.io/word-bomb-L1/" target="_blank" rel="noopener">Word Bomb 열기, engccer.github.io/word-bomb-L1</a></li>
-  </ul>
+  <p><a href="https://engccer.github.io/word-bomb-L1/" target="_blank" rel="noopener">Word Bomb 열기, engccer.github.io/word-bomb-L1</a></p>
   <p class="point">학습 콘텐츠 자체는 그대로 두고 그 콘텐츠로 들어가는 경로를 늘리는 것이다.</p>
 </div>
 
 <!-- 32 · Pick Me -->
 <div class="slide">
-  <p class="eyebrow">사례 둘 · 수업 운영 도구</p>
+  <p class="eyebrow">사례 둘, 수업 운영 도구</p>
   <h2 class="deck-h2">Pick Me</h2>
   <p class="big-quote">시각적으로 화려하면서도<br>접근성을 완벽하게 갖춰 줘</p>
-  <ul>
-    <li class="fragment">3D 룰렛과 로또 추첨과 낚시, 세 가지 테마를 넣어 사흘 만에 초기 버전을 완성했다</li>
-    <li class="fragment">그 한 줄 덕분에 화면 낭독기용 레이블과 <strong>키보드 조작, 고대비 색상 테마</strong>가 자연스럽게 내장되었다</li>
-    <li class="fragment">학생들은 수업이 시작되면 오늘도 픽미를 하자고 먼저 외친다</li>
-    <li class="fragment"><a href="https://aro-deeply.github.io/pickme/" target="_blank" rel="noopener">Pick Me 열기, aro-deeply.github.io/pickme</a></li>
-  </ul>
+  <div class="chips">
+    <span class="chip">3D 룰렛과 로또와 낚시</span>
+    <span class="chip">화면 낭독기용 레이블</span>
+    <span class="chip">키보드 조작</span>
+    <span class="chip">고대비 색상 테마</span>
+  </div>
+  <p><a href="https://aro-deeply.github.io/pickme/" target="_blank" rel="noopener">Pick Me 열기, aro-deeply.github.io/pickme</a></p>
   <p class="point">접근성은 기술적으로 어렵거나 불가능했던 일이 아니라 개발의 우선순위에서 늘 뒤로 밀려 있었을 뿐이다.</p>
 </div>
 
 <!-- 33 · 학생들의 평가 -->
 <div class="slide">
-  <p class="eyebrow">2026년 5월 · 신명중학교 1학년 155명 익명 설문</p>
+  <p class="eyebrow">2026년 5월, 신명중학교 1학년 155명 익명 설문</p>
   <h2 class="deck-h2">학생들의 평가</h2>
   <div class="chart-card fragment" role="img" aria-labelledby="chart-a-desc">
     <p class="sr-only" id="chart-a-desc">전체 만족도 5점 만점에 4.35점으로 긍정 응답 85.8퍼센트, 수업 집중도 4.17점으로 긍정 응답 80.0퍼센트, 영어 학습 도움 3.94점으로 긍정 응답 72.9퍼센트</p>
@@ -838,7 +871,7 @@ body.doc .shots img{height:auto;}
 
 <!-- 34 · 활용 희망과 도움받은 영역 -->
 <div class="slide">
-  <p class="eyebrow">앞으로의 활용 · 도움받은 영역</p>
+  <p class="eyebrow">앞으로의 활용, 도움받은 영역</p>
   <h2 class="deck-h2">더 자주 하자는 응답</h2>
   <div class="dual-chart">
     <div class="chart-pane fragment" role="img" aria-labelledby="chart-b-desc">
@@ -906,64 +939,127 @@ body.doc .shots img{height:auto;}
 <!-- 35 · 학습자 다양성의 증거 -->
 <div class="slide">
   <h2 class="deck-h2">학습자 다양성의 증거</h2>
-  <ul>
-    <li>재미와 학습 효과가 분리되지 않고 <strong>함께 올라갔다</strong></li>
-    <li class="fragment">한 학생은 속도에 점수가 붙으니 풀이를 끝까지 읽지 않게 된다며 속도 배점을 없애 달라고 했다</li>
-    <li class="fragment">다른 학생은 속도가 점수에 거의 반영되지 않아 긴장감이 떨어진다며 배점을 높여 달라고 했다</li>
-    <li class="fragment">정반대의 요구는 <em>설계의 실패가 아니라 학습자 다양성의 증거</em>다</li>
-  </ul>
-  <p class="point">반 고흐 미술관에서 관람객들이 모여든 것과 같은 결과를 교실에서 수치로 확인한 셈이다.</p>
+  <div class="cards">
+    <div class="card accent-blue fragment">
+      <p class="card-num">한 학생</p>
+      <h3>속도 배점을 없애 달라</h3>
+      <p>풀이를 끝까지 읽지 않게 됨</p>
+    </div>
+    <div class="card accent-coral fragment">
+      <p class="card-num">다른 학생</p>
+      <h3>속도 배점을 높여 달라</h3>
+      <p>긴장감이 떨어짐</p>
+    </div>
+  </div>
+  <p class="point">정반대의 요구는 설계의 실패가 아니라 학습자 다양성의 증거로 읽어야 한다.</p>
 </div>
 
 <!-- 36 · 4장 표지 -->
 <div class="slide">
   <p class="eyebrow">4</p>
-  <h2 class="deck-h2">전시 교육에 적용할 수 있는 다섯 가지</h2>
-  <p>모두 프로그램의 구성을 바꾸지 않고 진행 방식만으로 적용할 수 있는 것들이다.</p>
+  <h2 class="deck-h2">생물다양성교실에 적용할 수 있는 다섯 가지</h2>
+  <p>프로그램의 구성을 바꾸지 않고 진행 방식만으로 적용할 수 있는 것들이다.</p>
 </div>
 
-<!-- 37 · 다섯 가지 -->
+<!-- 37 · 제언 하나 -->
 <div class="slide">
-  <h2 class="deck-h2">다섯 가지 실천 항목</h2>
-  <ol>
-    <li class="fragment"><strong>시작 전에 묻는다.</strong> 사전 안내 단계에 문항 한 줄을 넣고, 답이 오지 않으면 도입부에 전체를 향해 묻는다</li>
-    <li class="fragment"><strong>설명자의 외모와 사물의 위치를 말로 제시한다.</strong> 시선을 전제한 지시어 대신 위치를 언어로 지정한다</li>
-    <li class="fragment"><strong>이차원 정보를 삼차원 자세로 옮긴다.</strong> 준비물이 들지 않아 가장 즉시 적용할 수 있다</li>
-    <li class="fragment"><strong>하나의 활동에 감각 경로를 하나 더 추가한다.</strong> 활동을 교체하지 않고 순서를 하나 추가한다</li>
-    <li class="fragment"><strong>만져도 되는 것을 미리 골라 표시한다.</strong> 새로 제작할 필요 없이 이미 갖춘 표본과 교구 가운데 고른다</li>
-  </ol>
+  <p class="eyebrow">하나</p>
+  <h2 class="deck-h2 act">교육 시작 전에 먼저 물어보세요</h2>
+  <div class="chips">
+    <span class="chip">사전 안내 문항에 한 줄 추가</span>
+    <span class="chip">답이 없으면 도입부에 전체를 향해</span>
+    <span class="chip">개인을 지목하지 않기</span>
+  </div>
+  <p class="point">전체에게 물으면 답하는 일이 특별한 행동이 되지 않는다.</p>
+</div>
+
+<!-- 38 · 제언 둘 -->
+<div class="slide">
+  <p class="eyebrow">둘</p>
+  <h2 class="deck-h2 act">준비한 것은 빠짐없이 말로 설명해 주세요</h2>
+  <div class="chips">
+    <span class="chip">교구, 표본, 화면, 활동지</span>
+    <span class="chip">이거와 저기 대신 오른쪽 책상 위</span>
+    <span class="chip">강사의 옷차림과 서 있는 자리부터</span>
+  </div>
+  <p class="point">뒤쪽에 앉은 학생과 잠시 주의가 흩어졌던 학생에게도 주의 집중 효과가 있다.</p>
+</div>
+
+<!-- 39 · 제언 셋 -->
+<div class="slide">
+  <p class="eyebrow">셋</p>
+  <h2 class="deck-h2 act">화면 속 모양을 몸으로 따라 하게 해 주세요</h2>
+  <div class="chips">
+    <span class="chip">나비의 날개는 두 팔로</span>
+    <span class="chip">잎맥은 손가락으로 등에</span>
+    <span class="chip">준비물 없이 지금 당장</span>
+  </div>
+  <p class="point">나탈리가 내 등에 붓질의 방향을 그린 것이 그 예다.</p>
+</div>
+
+<!-- 40 · 제언 넷 -->
+<div class="slide">
+  <p class="eyebrow">넷</p>
+  <h2 class="deck-h2 act">활동을 바꾸지 말고 순서를 하나만 더 넣어 주세요</h2>
+  <div class="chips">
+    <span class="chip">만들기 전에 재료 만져 보기</span>
+    <span class="chip">끝난 뒤 그 생물의 소리 들려주기</span>
+    <span class="chip">활동 교체가 아니라 순서 추가</span>
+  </div>
+  <p class="point">감각 경로가 하나 늘면 참여할 수 있는 학생이 늘어난다.</p>
+</div>
+
+<!-- 41 · 제언 다섯 -->
+<div class="slide">
+  <p class="eyebrow">다섯</p>
+  <h2 class="deck-h2 act">만져도 되는 표본을 미리 골라 알려 주세요</h2>
+  <div class="chips">
+    <span class="chip">새로 제작할 필요 없음</span>
+    <span class="chip">이미 갖춘 표본과 교구 가운데</span>
+    <span class="chip">사전 안내 자료에 목록 표기</span>
+  </div>
+  <p class="point">만져도 되는지 모르면 눈앞에 놓인 자료에도 손을 뻗지 않는다.</p>
+</div>
+
+<!-- 42 · 다시 쓰인다 -->
+<div class="slide">
+  <h2 class="deck-h2">다음 회차에도 다시 쓰인다</h2>
+  <div class="chips">
+    <span class="chip">만져 볼 수 있게 골라 둔 표본</span>
+    <span class="chip">몸으로 옮겨 보는 순서</span>
+  </div>
   <p class="point">특정 학습자를 위해 준비한 조정은 그 회차에서만 쓰이고 사라지지 않는다.</p>
 </div>
 
-<!-- 38 · 나가며 -->
+<!-- 43 · 나가며 -->
 <div class="slide">
   <p class="eyebrow">나가며</p>
   <h2 class="deck-h2">두 가지 기술이 따로 있지 않다</h2>
   <ul>
-    <li class="fragment"><strong>영상 자막</strong>은 청각장애인을 위해 만들어졌으나 지금은 소리를 켜지 못하는 모든 사람이 쓴다</li>
-    <li class="fragment"><strong>음성 안내</strong>는 시각장애인을 위해 만들어졌으나 지금은 운전 중인 모든 사람이 쓴다</li>
-    <li class="fragment"><strong>문턱을 없앤 경사로</strong>는 휠체어 이용자를 위해 만들어졌으나 지금은 유아차와 짐수레가 함께 지난다</li>
+    <li class="fragment"><strong>영상 자막</strong>, 청각장애인을 위한 것에서 소리를 켜지 못하는 모든 사람의 것으로</li>
+    <li class="fragment"><strong>음성 안내</strong>, 시각장애인을 위한 것에서 운전 중인 모든 사람의 것으로</li>
+    <li class="fragment"><strong>문턱을 없앤 경사로</strong>, 휠체어 이용자를 위한 것에서 유아차와 짐수레의 길로</li>
   </ul>
   <p class="point">한 사람의 필요에서 출발한 조치가 결국 모두가 쓰는 인프라가 된 것이다.</p>
 </div>
 
-<!-- 39 · 그냥 좋은 해설 -->
+<!-- 44 · 그냥 좋은 해설 -->
 <div class="slide">
   <h2 class="deck-h2">그냥 좋은 해설이었다</h2>
   <ul>
-    <li>반 고흐 미술관에서 내가 받은 해설은 시각장애인용 해설이 아니라 <em>그냥 좋은 해설</em>이었고, 그래서 지나가던 사람들이 걸음을 멈췄다</li>
-    <li class="fragment">내가 만든 학습자료도 시각장애 교사용 자료가 아니라 <em>그냥 잘 작동하는 자료</em>였고, 그래서 155명이 그것을 더 하자고 했다</li>
+    <li class="fragment">반 고흐 미술관의 해설, 시각장애인용이 아니라 <em>그냥 좋은 해설</em></li>
+    <li class="fragment">내가 만든 학습자료, 시각장애 교사용이 아니라 <em>그냥 잘 작동하는 자료</em></li>
   </ul>
   <p class="point">보지 못했기 때문에 오히려 더 알고 싶고, 그래서 친절한 설명이 덧붙여졌을 때 얻는 것도 그만큼 크다.</p>
 </div>
 
-<!-- 40 · 마지막 문장 -->
+<!-- 45 · 마지막 문장 -->
 <div class="slide">
   <h2 class="sr-only">마지막으로 남기고 싶은 한 문장</h2>
-  <p class="huge-q">전시장에서 가장 조용히 서 있는 사람이<br>그날 설명을 가장 기다리는 관람객일 수 있다</p>
+  <p class="huge-q">가장 조용히 앉아 있는 학생이<br>그날 설명을 가장 기다리고 있을 수 있다</p>
 </div>
 
-<!-- 41 · 공개해 둔 것 -->
+<!-- 46 · 공개해 둔 것 -->
 <div class="slide">
   <h2 class="deck-h2">공개해 둔 것</h2>
   <ul>
